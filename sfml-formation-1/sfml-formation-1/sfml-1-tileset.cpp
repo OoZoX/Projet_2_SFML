@@ -211,12 +211,24 @@ vector<vector<Sprite>> display_map(Texture& texture) {
     return {aff_map, aff_sol};
 
 }
+
+enum Keys { UP, DOWN, LEFT, RIGHT, SPACE, KEY_MAX };
+bool activeKeys[KEY_MAX] = { false };
+
 int main()
 {
+    sf::RenderWindow window(sf::VideoMode(768, 512), "SFML works!");
     Texture texture;
     texture.loadFromFile("foresttiles2-t.png");
-    sf::RenderWindow window(sf::VideoMode(768, 512), "SFML works!");
     vector<vector<Sprite>> recup_map = display_map(texture);
+    Texture texture2;
+    texture2.loadFromFile("characters.png");
+    Sprite character;
+    character.setTexture(texture2);
+    character.setTextureRect(IntRect(1 * 16, 0 * 16, 16, 16));
+    character.setScale(3, 3);
+    character.setPosition(50, 50);
+    float vit = 0.1f;
     while (window.isOpen())
     {
         sf::Event event;
@@ -224,10 +236,86 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Q)
+                {
+                    activeKeys[LEFT] = true;
+                }
+
+
+                if (event.key.code == sf::Keyboard::Z)
+                {
+                    activeKeys[UP] = true;
+                }
+
+
+
+                if (event.key.code == sf::Keyboard::S)
+                {
+                    activeKeys[DOWN] = true;
+                }
+
+
+                if (event.key.code == sf::Keyboard::D)
+                {
+                    activeKeys[RIGHT] = true;
+                }
+
+            }
+            if (event.type == sf::Event::KeyReleased)
+            {
+                if (event.key.code == sf::Keyboard::Q) { activeKeys[LEFT] = false; }
+                if (event.key.code == sf::Keyboard::Z) { activeKeys[UP] = false; }
+                if (event.key.code == sf::Keyboard::S) { activeKeys[DOWN] = false; }
+                if (event.key.code == sf::Keyboard::D) { activeKeys[RIGHT] = false; }
+            }
         }
-        
+        if (activeKeys[UP]) { character.move(0, -vit); }
+        if (activeKeys[UP] == false) { character.move(0, 0); }
 
+        if (activeKeys[LEFT]) { character.move(-vit, 0); }
+        if (activeKeys[LEFT] == false) { character.move(0, 0); }
 
+        if (activeKeys[RIGHT]) { character.move(vit, 0); }
+        if (activeKeys[RIGHT] == false) { character.move(0, 0); }
+
+        if (activeKeys[DOWN]) { character.move(0, vit); }
+        if (activeKeys[DOWN] == false) { character.move(0, 0); }
+
+        if (activeKeys[UP] && activeKeys[LEFT])
+        {
+            character.move(vit * 0.29, vit * 0.29);
+        }
+        if (activeKeys[UP] && activeKeys[RIGHT])// 848.53
+        {
+            character.move(-vit * 0.29, vit * 0.29); //0.71
+        }
+        if (activeKeys[DOWN] && activeKeys[LEFT])
+        {
+            character.move(vit * 0.29, -vit * 0.29);
+        }
+        if (activeKeys[DOWN] && activeKeys[RIGHT])
+        {
+            character.move(-vit * 0.29, -vit * 0.29);
+        }
+
+        if (character.getPosition().x <= 0)
+        {
+            character.setPosition(0, character.getPosition().y);
+        }
+        if (character.getPosition().x >= 590)
+        {
+            character.setPosition(590, character.getPosition().y);
+        }
+
+        if (character.getPosition().y <= 0) {
+            character.setPosition(character.getPosition().x, 0);
+
+        }
+        if (character.getPosition().y >= 580) {
+            character.setPosition(character.getPosition().x, 580);
+        }
         for (int i = 0; i < recup_map[1].size(); i++)
         {
             window.draw(recup_map[1][i]);
@@ -236,6 +324,7 @@ int main()
         {
             window.draw(recup_map[0][i]);
         }
+        window.draw(character);
         window.display();
         window.clear();
         }
