@@ -18,5 +18,8 @@
     <ClCompile Include="sfml-example-1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sfml-1-tileset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

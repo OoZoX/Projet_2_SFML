@@ -1,7 +1,8 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 using namespace std;
-#include <map>;
+#include <map>
+#include <iostream>
 typedef Vector2f vec2;
 typedef Vector2i vec2i;
 /*
@@ -77,7 +78,7 @@ namespace level {
         { "tree_base", {4,5}},        //
         { "tree_middle", {4,4}},      //
         { "tree_top", {4,3}},         //
-        { "nothing", {0,7}}
+        { "nothing", {0,7}},
     };
     map<string, string> aliasses = {
 
@@ -149,10 +150,73 @@ namespace level {
     };
 }
 
+
+vector<vector<Sprite>> display_map(Texture& texture) {
+    vector<Sprite> aff_map;
+    vector<Sprite> aff_sol;
+    const int multi_size = 16;
+    const int val_scale = 4;
+    
+    for (int i = 0; i < level::tile_strings.size(); i++)
+    {
+        string ligne = level::tile_strings[i];
+        for (int u = 0; u < ligne.size() /3; u++)
+        {
+
+            string lettres = ligne.substr(u*3, 2);
+            if (level::aliasses.count(lettres) || lettres == "  ")
+            {
+                string recup_key1 = level::aliasses[lettres];
+                if (level::tile_offsets.count(recup_key1)|| lettres == "  ")
+                {
+                    vec2i position = level::tile_offsets[recup_key1];
+
+                    Sprite sprite;
+
+                    Sprite sol;
+
+                    
+                    sol.setTexture(texture);
+                    sol.setTextureRect(IntRect(4 * multi_size, 6 * multi_size, multi_size, multi_size));
+                    sol.setPosition(u * multi_size * val_scale, i * multi_size * val_scale);
+                    sol.setScale(val_scale, val_scale);
+                    aff_sol.push_back(sol);
+
+                    if (lettres != "  ")
+                    {
+                        sprite.setTexture(texture);
+                        sprite.setTextureRect(IntRect(position.x * multi_size, position.y * multi_size, multi_size, multi_size));
+                        sprite.setPosition(u * multi_size * val_scale, i * multi_size * val_scale);
+                        sprite.setScale(val_scale, val_scale);
+                        aff_map.push_back(sprite);
+                    }
+
+                }
+                else 
+                {
+                    cout << "Erreur Key 2 !!! ---------------- \n";
+                }
+            }
+            else
+            {
+                cout << "Erreur Key 1 !!! ---------------- \n";
+            }
+
+
+        }
+
+
+    }
+
+    return {aff_map, aff_sol};
+
+}
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-
+    Texture texture;
+    texture.loadFromFile("foresttiles2-t.png");
+    sf::RenderWindow window(sf::VideoMode(768, 512), "SFML works!");
+    vector<vector<Sprite>> recup_map = display_map(texture);
     while (window.isOpen())
     {
         sf::Event event;
@@ -161,22 +225,22 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        map<string, Sprite> texture_map;
         
-        for (auto & tile : level::tile_offsets)
+
+
+        for (int i = 0; i < recup_map[1].size(); i++)
         {
-            vec2i position = tile.second;   // 
-            Sprite sprite;
-            Texture texture;
-            texture.loadFromFile("foresttiles2-t", IntRect(position.x, position.y, 16, 16));
-            sprite.setTexture(texture);
-            texture_map.insert(tile.first, sprite);
+            window.draw(recup_map[1][i]);
         }
-        window.clear();
-        window.draw(shape);
-        window.draw(sprite);
+        for (int i = 0; i < recup_map[0].size(); i++)
+        {
+            window.draw(recup_map[0][i]);
+        }
         window.display();
-    }
+        window.clear();
+        }
+
+        
 
     return 0;
 }

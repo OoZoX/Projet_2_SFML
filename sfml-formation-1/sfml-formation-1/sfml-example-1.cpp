@@ -1,5 +1,5 @@
-
 /*
+
 #include <SFML/Graphics.hpp>
 using namespace sf;
 int main()
@@ -24,6 +24,7 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        for ()
 
         window.clear();
         //window.draw(shape);
@@ -40,6 +41,7 @@ using namespace sf;
 
 enum Keys { UP, DOWN, LEFT, RIGHT, SPACE, KEY_MAX };
 bool activeKeys[KEY_MAX] = { false };
+
 
 
 int main()
