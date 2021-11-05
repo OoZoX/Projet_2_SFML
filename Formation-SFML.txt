@@ -1,0 +1,25 @@
+Formation SFML
+
+
+Questionnaire:
+    Comment te sens tu pour ECRIRE du C/C++?
+        1 2 3 4 5
+    Comment te sens tu pour LIRE du C/C++?
+        1 2 3 4 5
+    Quel outils as tu utilisé pour développer en C++?
+        Microsoft Clion makefile/g++ autre?
+    Te sers tu de git?
+    Si oui, sais tu utiliser merge?
+    branch?
+    As tu joué/terminé final fantasy 6, 7, 8, 9 ou 10?
+
+
+Ne réinventez pas la roue.
+
+32 bits
+C:\_code\libs\SFML-2.5.1\include
+C:\_code\libs\SFML-2.5.1\lib
+
+linux apt install sfml (tab pour autocomplete)
+
+
