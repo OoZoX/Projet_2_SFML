@@ -1,5 +1,9 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
+using namespace std;
+#include <map>;
+typedef Vector2f vec2;
+typedef Vector2i vec2i;
 /*
 Dans cet example, vous allez devoir charger et afficher un tileset
 Vous devrez charger plusieurs sprites, de préférences dans un vector<>.
@@ -144,6 +148,7 @@ namespace level {
 
     };
 }
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
@@ -156,7 +161,17 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
+        map<string, Sprite> texture_map;
+        
+        for (auto & tile : level::tile_offsets)
+        {
+            vec2i position = tile.second;   // 
+            Sprite sprite;
+            Texture texture;
+            texture.loadFromFile("foresttiles2-t", IntRect(position.x, position.y, 16, 16));
+            sprite.setTexture(texture);
+            texture_map.insert(tile.first, sprite);
+        }
         window.clear();
         window.draw(shape);
         window.draw(sprite);
