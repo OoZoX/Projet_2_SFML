@@ -281,40 +281,38 @@ int main()
                 if (event.key.code == sf::Keyboard::D) { activeKeys[RIGHT] = false; }
             }
         }
-        if (activeKeys[UP] == false) { velocity.y -= velocity.y; cout << "false" << endl; }
+        if (activeKeys[UP] == false) { velocity.y -= velocity.y; }
         if (activeKeys[LEFT] == false) { velocity.x -= velocity.x; }
         if (activeKeys[RIGHT] == false) { velocity.x -= velocity.x; }
         if (activeKeys[DOWN] == false) { velocity.y -= velocity.y; }
 
 
-        if (activeKeys[UP]) { velocity.y -= speed; cout << "--------aa" << velocity.y << "----------" << endl; }
+        if (activeKeys[UP]) { velocity.y -= speed; }
         if (activeKeys[LEFT]) {velocity.x -= speed; }
         if (activeKeys[RIGHT]) { velocity.x += speed; }
-        if (activeKeys[DOWN]) { velocity.y += speed; cout << "--------bb" << velocity.y << "----------" << endl;
-        }
+        if (activeKeys[DOWN]) { velocity.y += speed; }
         
 
 
-        cout << velocity.x << velocity.y << endl;
         normalize(velocity, speed);
         character.move(velocity);
 
-        /*if (slime.getPosition().x >= 266)
+        if (slime.getPosition().x >= 266 && int(slime.getPosition().y) == 0)
         {
-            slime.move(-0.2, 0);
+            slime.move(-0.05, 0);
         }
-        else if (slime.getPosition().y <= 72)
+        else if (slime.getPosition().y <= 72 && int(slime.getPosition().x) == 265)
         {
-            slime.move(0, 0.2);
+            slime.move(0, 0.05);
         }
-        else if (slime.getPosition().x <= 330)
+        else if (slime.getPosition().x <= 330 && int(slime.getPosition().y) == 72)
         {
-            slime.move(0.2, 0);
+            slime.move(0.05, 0);
         }
-        else if (slime.getPosition().y >= 0)
+        else if (slime.getPosition().y >= 0 && int(slime.getPosition().x) == 330)
         {
-            slime.move(0, -0.2);
-        }*/
+            slime.move(0, -0.05);
+        }
 
         /*
         if (activeKeys[UP] && activeKeys[LEFT])
