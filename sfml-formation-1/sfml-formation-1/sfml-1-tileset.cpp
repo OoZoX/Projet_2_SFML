@@ -240,6 +240,13 @@ int main()
     character.setTextureRect(IntRect(1 * 16, 0 * 16, 16, 16));
     character.setScale(3, 3);
     character.setPosition(50, 50);
+    Texture slimeTexture;
+    slimeTexture.loadFromFile("characters.png");
+    Sprite slime;
+    slime.setTexture(slimeTexture);
+    slime.setTextureRect(IntRect(1 * 16, 4 * 16, 16, 16));
+    slime.setScale(3, 3);
+    slime.setPosition(330, 0);
     float vit = 0.1f;
 
 
@@ -289,8 +296,25 @@ int main()
 
 
         cout << velocity.x << velocity.y << endl;
-        //normalize(velocity, speed);
+        normalize(velocity, speed);
         character.move(velocity);
+
+        /*if (slime.getPosition().x >= 266)
+        {
+            slime.move(-0.2, 0);
+        }
+        else if (slime.getPosition().y <= 72)
+        {
+            slime.move(0, 0.2);
+        }
+        else if (slime.getPosition().x <= 330)
+        {
+            slime.move(0.2, 0);
+        }
+        else if (slime.getPosition().y >= 0)
+        {
+            slime.move(0, -0.2);
+        }*/
 
         /*
         if (activeKeys[UP] && activeKeys[LEFT])
@@ -310,28 +334,22 @@ int main()
             character.move(-vit * 0.29, -vit * 0.29);
         }
         */
-
-        /*
         if (character.getPosition().x <= 0)
         {
             character.setPosition(0, character.getPosition().y);
         }
-        if (character.getPosition().x >= 590)
+        if (character.getPosition().x >= 720)
         {
-            character.setPosition(590, character.getPosition().y);
+            character.setPosition(720, character.getPosition().y);
         }
 
         if (character.getPosition().y <= 0) {
             character.setPosition(character.getPosition().x, 0);
 
         }
-        if (character.getPosition().y >= 580) {
-            character.setPosition(character.getPosition().x, 580);
+        if (character.getPosition().y >= 464) {
+            character.setPosition(character.getPosition().x, 464);
         }
-
-
-        */
-
         for (int i = 0; i < recup_map[1].size(); i++)
         {
             window.draw(recup_map[1][i]);
@@ -340,6 +358,8 @@ int main()
         {
             window.draw(recup_map[0][i]);
         }
+
+        window.draw(slime);
         window.draw(character);
         window.display();
         window.clear();
