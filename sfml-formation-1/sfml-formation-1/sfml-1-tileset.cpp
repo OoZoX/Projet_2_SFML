@@ -456,22 +456,42 @@ int main()
                 window.close();
             if (event.type == sf::Event::KeyPressed)
             {
-                if (event.key.code == sf::Keyboard::Q)
-                {activeKeys[LEFT] = true;}
-                if (event.key.code == sf::Keyboard::Z)
-                {activeKeys[UP] = true;}
-                if (event.key.code == sf::Keyboard::S)
-                {activeKeys[DOWN] = true;}
-                if (event.key.code == sf::Keyboard::D)
-                {activeKeys[RIGHT] = true;}
+                if (event.key.code == sf::Keyboard::Z || event.key.code == sf::Keyboard::W)
+                {
+                    activeKeys[UP] = true;
+                }
+                else if (event.key.code == sf::Keyboard::Q || event.key.code == sf::Keyboard::A)
+                {
+                    activeKeys[LEFT] = true;
+                }
+                else if (event.key.code == sf::Keyboard::S)
+                {
+                    activeKeys[DOWN] = true;
+                }
+                else if (event.key.code == sf::Keyboard::D)
+                {
+                    activeKeys[RIGHT] = true;
+                }
 
             }
             if (event.type == sf::Event::KeyReleased)
             {
-                if (event.key.code == sf::Keyboard::Q) { activeKeys[LEFT] = false; }
-                if (event.key.code == sf::Keyboard::Z) { activeKeys[UP] = false; }
-                if (event.key.code == sf::Keyboard::S) { activeKeys[DOWN] = false; }
-                if (event.key.code == sf::Keyboard::D) { activeKeys[RIGHT] = false; }
+                if (event.key.code == sf::Keyboard::Z || event.key.code == sf::Keyboard::W) 
+                { 
+                    activeKeys[UP] = false; 
+                }
+                else if (event.key.code == sf::Keyboard::Q || event.key.code == sf::Keyboard::A) 
+                { 
+                    activeKeys[LEFT] = false; 
+                }
+                else if (event.key.code == sf::Keyboard::S) 
+                { 
+                    activeKeys[DOWN] = false; 
+                }
+                else if (event.key.code == sf::Keyboard::D) 
+                { 
+                    activeKeys[RIGHT] = false; 
+                }
             }
         }
 
@@ -502,9 +522,17 @@ int main()
         {
             hero.setPosition(0, hero.getPosition().y);
         }
-        if (hero.getPosition().x >= 720)
+        else if (hero.getPosition().x >= 720)
         {
             hero.setPosition(720, hero.getPosition().y);
+        }
+        else if (hero.getPosition().y <= 0) 
+        {
+            hero.setPosition(hero.getPosition().x, 0);
+        }
+        else if (hero.getPosition().y >= 464) 
+        {
+            hero.setPosition(hero.getPosition().x, 464);
         }
 
         if (slime.getPosition().x >= 266 && int(slime.getPosition().y) == 0)
@@ -522,14 +550,6 @@ int main()
         else if (slime.getPosition().y >= 0 && int(slime.getPosition().x) == 331)
         {
             slime.move(0, -1);
-        }
-
-        if (hero.getPosition().y <= 0) {
-            hero.setPosition(hero.getPosition().x, 0);
-
-        }
-        if (hero.getPosition().y >= 464) {
-            hero.setPosition(hero.getPosition().x, 464);
         }
 
         window.draw(slime);
