@@ -5,6 +5,7 @@ using namespace sf;
 
 typedef Vector2i vec2i;
 
+Level::Level() {};
 
 void Level::displayLevel(Texture& texture) {
 

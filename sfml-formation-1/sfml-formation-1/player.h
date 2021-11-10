@@ -37,9 +37,9 @@ private:
     std::map<std::string, sf::IntRect> IntRectHero;
 
 public:
-    Player player();
+    Player();
 
-    Sprite recup_hero();
+    sf::Sprite recup_hero();
 
     void normalize();
 

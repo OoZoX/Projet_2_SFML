@@ -4,7 +4,7 @@
 using namespace std;
 using namespace sf;
 
-Ennemy Ennemy::ennemy(){}
+Ennemy::Ennemy(){}
 
 Sprite Ennemy::recup_sprite_ennemy()
 {

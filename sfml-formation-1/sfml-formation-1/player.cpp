@@ -6,7 +6,7 @@
 using namespace sf;
 using namespace std;
 
-Player Player::player(){}
+Player::Player(){}
 
 Sprite Player::recup_hero() 
 {

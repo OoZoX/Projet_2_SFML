@@ -8,11 +8,13 @@
 #include <map>
 #include <iostream>
 
+using namespace sf;
+using namespace std;
+
 typedef Vector2f vec2;
 typedef Vector2i vec2i;
 
-using namespace sf;
-using namespace std;
+
 
 
 int main()
@@ -78,7 +80,7 @@ int main()
             window.draw(recup_map[i]);
         }
 
-        window.draw(slime.recup_ennemy());
+        window.draw(slime.recup_sprite_ennemy());
         window.draw(hero.recup_hero());
         window.display();
         window.clear();

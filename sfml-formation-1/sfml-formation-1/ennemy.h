@@ -27,8 +27,8 @@ private:
     };
 
 public:
-    Ennemy ennemy();
-    Sprite recup_sprite_ennemy();
+    Ennemy();
+    sf::Sprite recup_sprite_ennemy();
     void addEnnemySprite();
     void moveEnnemy(Manager& manager);
     void move();

@@ -138,8 +138,9 @@ private:
     };
 
 public:
-    void displayLevel(Texture& texture);
-    vector<Sprite> recup_display_map();
-    vector<Sprite> recup_display_ground();
+    Level();
+    void displayLevel(sf::Texture& texture);
+    std::vector<sf::Sprite> recup_display_map();
+    std::vector<sf::Sprite> recup_display_ground();
 };
 
