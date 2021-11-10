@@ -6,31 +6,7 @@ using namespace std;
 typedef Vector2f vec2;
 typedef Vector2i vec2i;
 
-namespace level {
-   
-}
 
-
-
-
-
-
-
-
-map<string, IntRect> addHeroSprite()
-{
-    map<string, IntRect> IntRectHero;
-
-    for (auto & tile : heroTiles)
-    {
-        IntRectHero[tile.first] = IntRect(tile.second.x * 16, tile.second.y * 16, 16, 16);
-    }
-
-    return IntRectHero;
-}
-
-enum Keys { UP, DOWN, LEFT, RIGHT, SPACE, KEY_MAX };
-bool activeKeys[KEY_MAX] = { false };
 
 
 void moveHero(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& hero, map<string, IntRect>& IntRectHero, Keys& exKey)
