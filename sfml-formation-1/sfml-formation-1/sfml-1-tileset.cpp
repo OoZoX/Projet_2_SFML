@@ -5,24 +5,6 @@ using namespace std;
 #include <iostream>
 typedef Vector2f vec2;
 typedef Vector2i vec2i;
-/*
-Dans cet example, vous allez devoir charger et afficher un tileset
-Vous devrez charger plusieurs sprites, de pr�f�rences dans un vector<>.
-Vous devrez utiliser la fonction Sprite::setTextureRect() qui prend un IntRect en argument.
-
-Un IntRect est un struct POD (plain old data type) contenant une origine et une taille, en entier.
-
-Cette fonction permet de n'afficher que une certaine r�gion de texture dans votre Sprite.
-
-Je vous ai fourni un niveau � charger, une std::map<string,string> et une std::map<string, Vector2i> pr�remplies, et une image qui permet de visualiser la disposition des tiles.
-
-Votre travail consiste � �crire la fonction load_level(), qui doit:
-* instancier les Sprite et appeler la fonction setTextureRect() sur chacun d'entre eux.
-* positionner les Sprites
-Les tiles font 16x16px, il faudra donc multiplier par 16 les offset fournis dans la map
-Il sera n�cessaire de charger deux grilles de tiles, la premi�re �tant celle du sol, et l'autre des objets.
-
-*/
 
 namespace level {
     map<string, vec2i> tile_offsets = {
@@ -150,13 +132,11 @@ namespace level {
     };
 }
 
-
-
-vector<vector<Sprite>> display_map(Texture& texture) {
-    vector<Sprite> aff_map;
-    vector<Sprite> aff_sol;
-    const int multi_size = 16;
-    const int val_scale = 4;
+vector<vector<Sprite>> displayLevel(Texture& texture) {
+    vector<Sprite> displayMap;
+    vector<Sprite> displayGround;
+    const int size = 16;
+    const int scale = 4;
 
     for (int i = 0; i < level::tile_strings.size(); i++)
     {
@@ -174,42 +154,30 @@ vector<vector<Sprite>> display_map(Texture& texture) {
 
                     Sprite sprite;
 
-                    Sprite sol;
+                    Sprite ground;
 
 
-                    sol.setTexture(texture);
-                    sol.setTextureRect(IntRect(4 * multi_size, 6 * multi_size, multi_size, multi_size));
-                    sol.setPosition(u * multi_size * val_scale, i * multi_size * val_scale);
-                    sol.setScale(val_scale, val_scale);
-                    aff_sol.push_back(sol);
+                    ground.setTexture(texture);
+                    ground.setTextureRect(IntRect(4 * size, 6 * size, size, size));
+                    ground.setPosition(u * size * scale, i * size * scale);
+                    ground.setScale(scale, scale);
+                    displayGround.push_back(ground);
 
                     if (lettres != "  ")
                     {
                         sprite.setTexture(texture);
-                        sprite.setTextureRect(IntRect(position.x * multi_size, position.y * multi_size, multi_size, multi_size));
-                        sprite.setPosition(u * multi_size * val_scale, i * multi_size * val_scale);
-                        sprite.setScale(val_scale, val_scale);
-                        aff_map.push_back(sprite);
+                        sprite.setTextureRect(IntRect(position.x * size, position.y * size, size, size));
+                        sprite.setPosition(u * size * scale, i * size * scale);
+                        sprite.setScale(scale, scale);
+                        displayMap.push_back(sprite);
                     }
 
                 }
-                else
-                {
-                    cout << "Erreur Key 2 !!! ---------------- \n";
-                }
             }
-            else
-            {
-                cout << "Erreur Key 1 !!! ---------------- \n";
-            }
-
-
         }
-
-
     }
 
-    return { aff_map, aff_sol };
+    return { displayMap, displayGround };
 
 }
 
@@ -225,8 +193,7 @@ void normalize(Vector2f& velocity, float speed)
 
 }
 
-
-map<string, vec2i> tile_perso = {
+map<string, vec2i> heroTiles = {
     {"bas", {1,0}},
     {"bas-1", {0,0}},
     {"bas-2", {2,0}},
@@ -242,60 +209,60 @@ map<string, vec2i> tile_perso = {
 };
 
 
-map<string, IntRect> add_sprite_perso(Texture& texture_perso)
+map<string, IntRect> addHeroSprite()
 {
-    map<string, IntRect> IntRect_perso;
+    map<string, IntRect> IntRectHero;
 
-    for (auto & tile : tile_perso)
+    for (auto & tile : heroTiles)
     {
-        IntRect_perso[tile.first] = IntRect(tile.second.x * 16, tile.second.y * 16, 16, 16);
+        IntRectHero[tile.first] = IntRect(tile.second.x * 16, tile.second.y * 16, 16, 16);
     }
 
-    return IntRect_perso;
+    return IntRectHero;
 }
 
 enum Keys { UP, DOWN, LEFT, RIGHT, SPACE, KEY_MAX };
 bool activeKeys[KEY_MAX] = { false };
 
 
-void mouve_sprite(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& perso, map<string, IntRect>& IntRectPerso, Keys& ex_key)
+void moveHero(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& hero, map<string, IntRect>& IntRectHero, Keys& exKey)
 {
     Time time1 = seconds(0.5f);
     Time time2 = seconds(0.25f);
 
     if (activeKeys[DOWN])
     {
-        ex_key = Keys::DOWN;
+        exKey = Keys::DOWN;
         if (velocity.y > 0) 
         {
             if (timer >= time1)
             {
                 timer = clock.restart();
 
-                perso.setTextureRect(IntRectPerso["bas-2"]);
+                hero.setTextureRect(IntRectHero["bas-2"]);
             }
 
             else if (timer >= time2)
             {
-                perso.setTextureRect(IntRectPerso["bas-1"]);
+                hero.setTextureRect(IntRectHero["bas-1"]);
             }
         }
         
     }
     else if (activeKeys[UP])
     {
-        ex_key = Keys::UP;
+        exKey = Keys::UP;
         if (velocity.y < 0)
         {
             if (timer >= time1)
             {
                 timer = clock.restart();
-                perso.setTextureRect(IntRectPerso["haut-2"]);
+                hero.setTextureRect(IntRectHero["haut-2"]);
             }
 
             else if (timer >= time2)
             {
-                perso.setTextureRect(IntRectPerso["haut-1"]);
+                hero.setTextureRect(IntRectHero["haut-1"]);
             }
         }
 
@@ -303,18 +270,18 @@ void mouve_sprite(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& pers
     }
     else if (activeKeys[RIGHT])
     {
-        ex_key = Keys::RIGHT;
+        exKey = Keys::RIGHT;
         if (velocity.x > 0)
         {
             if (timer >= time1)
             {
                 timer = clock.restart();
-                perso.setTextureRect(IntRectPerso["droite-2"]);
+                hero.setTextureRect(IntRectHero["droite-2"]);
             }
 
             else if (timer >= time2)
             {
-                perso.setTextureRect(IntRectPerso["droite-1"]);
+                hero.setTextureRect(IntRectHero["droite-1"]);
             }
         }
 
@@ -322,38 +289,124 @@ void mouve_sprite(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& pers
     }
     else if (activeKeys[LEFT])
     {
-        ex_key = Keys::LEFT;
+        exKey = Keys::LEFT;
         if (velocity.x < 0)
         {
             if (timer >= time1)
             {
                 timer = clock.restart();
-                perso.setTextureRect(IntRectPerso["gauche-2"]);
+                hero.setTextureRect(IntRectHero["gauche-2"]);
             }
 
             else if (timer >= time2)
             {
-                perso.setTextureRect(IntRectPerso["gauche-1"]);
+                hero.setTextureRect(IntRectHero["gauche-1"]);
             }
         }
 
     }
-    else if (ex_key == Keys::DOWN)
+    else if (exKey == Keys::DOWN)
     {
-        perso.setTextureRect(IntRectPerso["bas"]);
+        hero.setTextureRect(IntRectHero["bas"]);
     }
-    else if (ex_key == Keys::UP)
+    else if (exKey == Keys::UP)
     {
-        perso.setTextureRect(IntRectPerso["haut"]);
+        hero.setTextureRect(IntRectHero["haut"]);
     }
-    else if (ex_key == Keys::RIGHT)
+    else if (exKey == Keys::RIGHT)
     {
-        perso.setTextureRect(IntRectPerso["droite"]);
+        hero.setTextureRect(IntRectHero["droite"]);
     }
-    else if (ex_key == Keys::LEFT)
+    else if (exKey == Keys::LEFT)
     {
-        perso.setTextureRect(IntRectPerso["gauche"]);
+        hero.setTextureRect(IntRectHero["gauche"]);
     }
+}
+
+map<string, vec2i> ennemyTiles = {
+    {"bas", {1,4}},
+    {"bas-1", {0,4}},
+    {"bas-2", {2,4}},
+    {"gauche", {1,5}},
+    {"gauche-1", {0,5}},
+    {"gauche-2", {2,5}},
+    {"droite", {1,6}},
+    {"droite-1",{0,6}},
+    {"droite-2", {2,6}},
+    {"haut", {1,7}},
+    {"haut-1", {0,7}},
+    {"haut-2", {2,7}}
+};
+
+map<string, IntRect> addEnnemySprite()
+{
+    map<string, IntRect> IntRectEnnemy;
+
+    for (auto& tile : ennemyTiles)
+    {
+        IntRectEnnemy[tile.first] = IntRect(tile.second.x * 16, tile.second.y * 16, 16, 16);
+    }
+
+    return IntRectEnnemy;
+}
+
+void moveEnnemy(sf::Time& timer, Clock& clock, Sprite& ennemy, map<string, IntRect>& IntRectEnnemy)
+{
+    Time time1 = seconds(0.5f);
+    Time time2 = seconds(0.25f);
+    if (ennemy.getPosition().x >= 266 && int(ennemy.getPosition().y) == 0)
+    {
+        if (timer >= time1)
+        {
+            timer = clock.restart();
+            ennemy.setTextureRect(IntRectEnnemy["gauche-2"]);
+        }
+
+        else if (timer >= time2)
+        {
+            ennemy.setTextureRect(IntRectEnnemy["gauche-1"]);
+        }
+    }
+    else if (ennemy.getPosition().y <= 72 && int(ennemy.getPosition().x) == 265)
+    {
+        if (timer >= time1)
+        {
+            timer = clock.restart();
+            ennemy.setTextureRect(IntRectEnnemy["bas-2"]);
+        }
+
+        else if (timer >= time2)
+        {
+            ennemy.setTextureRect(IntRectEnnemy["bas-1"]);
+        }
+    }
+    else if (ennemy.getPosition().x <= 330 && int(ennemy.getPosition().y) == 73)
+    {
+        if (timer >= time1)
+        {
+            timer = clock.restart();
+            ennemy.setTextureRect(IntRectEnnemy["droite-2"]);
+        }
+
+        else if (timer >= time2)
+        {
+            ennemy.setTextureRect(IntRectEnnemy["droite-1"]);
+        }
+    }
+    else if (ennemy.getPosition().y >= 0 && int(ennemy.getPosition().x) == 331)
+    {
+        if (timer >= time1)
+        {
+            timer = clock.restart();
+            ennemy.setTextureRect(IntRectEnnemy["haut-2"]);
+        }
+
+        else if (timer >= time2)
+        {
+            ennemy.setTextureRect(IntRectEnnemy["haut-1"]);
+        }
+    }
+    
 }
 
 
@@ -361,46 +414,35 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(768, 512), "SFML works!");
 
+    Texture mapTexture;
+    mapTexture.loadFromFile("foresttiles2-t.png");
+    vector<vector<Sprite>> recup_map = displayLevel(mapTexture);
 
-    Texture texture_map;
-    texture_map.loadFromFile("foresttiles2-t.png");
-    vector<vector<Sprite>> recup_map = display_map(texture_map);
+    Texture charactersTexture;
+    charactersTexture.loadFromFile("characters.png");
 
-
-    Texture texture_perso;
-    texture_perso.loadFromFile("characters.png");
-
-    Sprite character;
-    character.setPosition(50, 50);
-    character.setTexture(texture_perso);
-
-    character.setTextureRect(IntRect(1 * 16, 0 * 16, 16, 16));
-    character.setScale(3, 3);
-    character.setPosition(50, 50);
-    Texture slimeTexture;
-    slimeTexture.loadFromFile("characters.png");
-    Sprite slime;
-    slime.setTexture(slimeTexture);
-    slime.setTextureRect(IntRect(1 * 16, 4 * 16, 16, 16));
-    slime.setScale(3, 3);
-    slime.setPosition(330, 0);
-    float vit = 0.1f;
-
-
-    Keys ex_key = Keys::DOWN;
-
-    map<string, IntRect> IntRectPerso = add_sprite_perso(texture_perso);
-    
-    Time mesure_temp = seconds(0.1f);
-
-    window.setFramerateLimit(60);
-
+    Sprite hero;
+    hero.setPosition(50, 50);
+    hero.setTexture(charactersTexture);
+    hero.setTextureRect(IntRect(1 * 16, 0 * 16, 16, 16));
+    hero.setScale(3, 3);
+    hero.setPosition(50, 50);
+    map<string, IntRect> IntRectPerso = addHeroSprite();
     sf::Vector2f velocity;
     float speed = 2.0f;
 
+    Sprite slime;
+    slime.setTexture(charactersTexture);
+    slime.setTextureRect(IntRect(1 * 16, 4 * 16, 16, 16));
+    slime.setScale(3, 3);
+    slime.setPosition(330, 0);
+    map<string, IntRect> IntRectEnnemy = addEnnemySprite();
+
     Clock clock;
     Time timer;
-    
+    Time mesureTemp = seconds(0.1f);
+    Keys exKey = Keys::DOWN;
+    window.setFramerateLimit(60);
 
     sf::Event event;
 
@@ -432,83 +474,6 @@ int main()
                 if (event.key.code == sf::Keyboard::D) { activeKeys[RIGHT] = false; }
             }
         }
-        cout << "ccc" << timer.asSeconds() << endl;
-        mouve_sprite(timer, clock, velocity, character, IntRectPerso, ex_key);
-        //cout << "ddd" << timer.asSeconds() << endl;
-
-        if (activeKeys[UP] == false) { velocity.y -= velocity.y; cout << "false" << endl; }
-        if (activeKeys[LEFT] == false) { velocity.x -= velocity.x; }
-        if (activeKeys[RIGHT] == false) { velocity.x -= velocity.x; }
-        if (activeKeys[DOWN] == false) { velocity.y -= velocity.y; }
-
-
-        if (activeKeys[UP]) { velocity.y -= speed; }
-        if (activeKeys[LEFT]) {velocity.x -= speed; }
-        if (activeKeys[RIGHT]) { velocity.x += speed; }
-        if (activeKeys[DOWN]) { velocity.y += speed; }
-        
-
-
-        cout << velocity.x << velocity.y << endl;
-        normalize(velocity, speed);
-        character.move(velocity);
-
-        if (slime.getPosition().x >= 266 && int(slime.getPosition().y) == 0)
-        {
-            slime.move(-0.05, 0);
-        }
-        else if (slime.getPosition().y <= 72 && int(slime.getPosition().x) == 265)
-        {
-            slime.move(0, 0.05);
-        }
-        else if (slime.getPosition().x <= 330 && int(slime.getPosition().y) == 72)
-        {
-            slime.move(0.05, 0);
-        }
-        else if (slime.getPosition().y >= 0 && int(slime.getPosition().x) == 330)
-        {
-            slime.move(0, -0.05);
-        }
-
-        /*
-        if (activeKeys[UP] && activeKeys[LEFT])
-        {
-            character.move(vit * 0.29, vit * 0.29);
-        }
-        if (activeKeys[UP] && activeKeys[RIGHT])// 848.53
-        {
-            character.move(-vit * 0.29, vit * 0.29); //0.71
-        }
-        if (activeKeys[DOWN] && activeKeys[LEFT])
-        {
-            character.move(vit * 0.29, -vit * 0.29);
-        }
-        if (activeKeys[DOWN] && activeKeys[RIGHT])
-        {
-            character.move(-vit * 0.29, -vit * 0.29);
-        }
-        */
-
-        
-        if (character.getPosition().x <= 0)
-        {
-            character.setPosition(0, character.getPosition().y);
-        }
-        if (character.getPosition().x >= 720)
-        {
-            character.setPosition(720, character.getPosition().y);
-        }
-
-        if (character.getPosition().y <= 0) {
-            character.setPosition(character.getPosition().x, 0);
-
-        }
-        if (character.getPosition().y >= 464) {
-            character.setPosition(character.getPosition().x, 464);
-        }
-
-
-        
 
         for (int i = 0; i < recup_map[1].size(); i++)
         {
@@ -519,112 +484,58 @@ int main()
             window.draw(recup_map[0][i]);
         }
 
-        window.draw(slime);
-        window.draw(character);
-        window.display();
-        window.clear();
-    }
+        normalize(velocity, speed);
+        hero.move(velocity);
+        moveHero(timer, clock, velocity, hero, IntRectPerso, exKey);
+        moveEnnemy(timer, clock, slime, IntRectEnnemy);
 
-        
+        if (activeKeys[UP] == false) { velocity.y -= velocity.y; }
+        if (activeKeys[LEFT] == false) { velocity.x -= velocity.x; }
+        if (activeKeys[RIGHT] == false) { velocity.x -= velocity.x; }
+        if (activeKeys[DOWN] == false) { velocity.y -= velocity.y; }
+        if (activeKeys[UP]) { velocity.y -= speed; }
+        if (activeKeys[LEFT]) {velocity.x -= speed; }
+        if (activeKeys[RIGHT]) { velocity.x += speed; }
+        if (activeKeys[DOWN]) { velocity.y += speed; }
 
-
-    return 0;
-}
-
-/**
-
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <Windows.h>
-
-
-using namespace sf;
-using namespace std;
-
-void normalize(Vector2f& velocity, float speed) {
-    float norme = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y));
-    if (norme != 0)
-    {
-        velocity.x = ((velocity.x) / norme) * speed;
-        velocity.y = ((velocity.y) / norme) * speed;
-    }
-}
-
-int main()
-{
-    int dim = 16; // Ne pas changer (taille des tiles de foresttiles2-t.png)
-    int scale = 4;
-
-#pragma region INIT
-
-    sf::RenderWindow window(sf::VideoMode((dim * scale * 12), (dim * scale * 8)), "The game seems to be working..."); // La map possede 12 colones et 8 lignes
-    window.setKeyRepeatEnabled(false);
-
-#pragma region Player
-    sf::RectangleShape entity(sf::Vector2f(((dim - 4) * scale), (dim * scale)));
-    Texture texture;
-    texture.loadFromFile("ghost.png");
-    Sprite sprite;
-    entity.setTexture(&texture);
-    sf::Vector2f velocity;
-    float speed = 0.5;
-#pragma endregion
-
-#pragma region Map
-    Tilemap T;
-    Texture maptexture;
-    maptexture.loadFromFile("foresttiles2-t.png");
-    vector<Sprite> vecground = T.loadGround(dim, scale, maptexture);
-    vector<Sprite> vecmap = T.loadLevel(dim, scale, maptexture);
-#pragma endregion
-
-#pragma endregion
-
-    while (window.isOpen())
-    {
-        Event event;
-        while (window.pollEvent(event))
+        if (hero.getPosition().x <= 0)
         {
-            if (event.type == Event::Closed) { window.close(); }
-            if (event.type == Event::KeyReleased)
-            {
-                switch (event.key.code)
-                {
-                case Keyboard::Z:
-                    velocity.y -= velocity.y;
-                    break;
-                case Keyboard::Q:
-                    velocity.x -= velocity.x;
-                    break;
-                case Keyboard::S:
-                    velocity.y -= velocity.y;
-                    break;
-                case Keyboard::D:
-                    velocity.x -= velocity.x;
-                    break;
-                }
-            }
+            hero.setPosition(0, hero.getPosition().y);
+        }
+        if (hero.getPosition().x >= 720)
+        {
+            hero.setPosition(720, hero.getPosition().y);
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::Z)) { velocity.y -= speed; }
-        if (Keyboard::isKeyPressed(Keyboard::Q)) { velocity.x -= speed; }
-        if (Keyboard::isKeyPressed(Keyboard::S)) { velocity.y += speed; }
-        if (Keyboard::isKeyPressed(Keyboard::D)) { velocity.x += speed; }
+        if (slime.getPosition().x >= 266 && int(slime.getPosition().y) == 0)
+        {
+            slime.move(-1, 0);
+        }
+        else if (slime.getPosition().y <= 72 && int(slime.getPosition().x) == 265)
+        {
+            slime.move(0, 1);
+        }
+        else if (slime.getPosition().x <= 330 && int(slime.getPosition().y) == 73)
+        {
+            slime.move(1, 0);
+        }
+        else if (slime.getPosition().y >= 0 && int(slime.getPosition().x) == 331)
+        {
+            slime.move(0, -1);
+        }
 
-        normalize(velocity, speed);
-        entity.move(velocity); 
-        cout << "Velocity " + to_string(velocity.x) + " | " + to_string(velocity.y) + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+        if (hero.getPosition().y <= 0) {
+            hero.setPosition(hero.getPosition().x, 0);
 
-#pragma region Draw
-        window.clear();
-        for (int i = 0; i < vecground.size(); i++) { window.draw(vecground[i]); }
-        for (int i = 0; i < vecmap.size(); i++) { window.draw(vecmap[i]); }
-        window.draw(entity);
-        window.draw(sprite);
+        }
+        if (hero.getPosition().y >= 464) {
+            hero.setPosition(hero.getPosition().x, 464);
+        }
+
+        window.draw(slime);
+        window.draw(hero);
         window.display();
-#pragma endregion
+        window.clear();
     }
     return 0;
 }
-
-*/
