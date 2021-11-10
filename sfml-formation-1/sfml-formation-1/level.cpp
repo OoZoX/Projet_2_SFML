@@ -6,7 +6,7 @@ using namespace sf;
 typedef Vector2i vec2i;
 
 
-vector<vector<Sprite>> Level::displayLevel(Texture& texture) {
+void Level::displayLevel(Texture& texture) {
 
     const int size = 16;
     const int scale = 4;
@@ -44,15 +44,19 @@ vector<vector<Sprite>> Level::displayLevel(Texture& texture) {
                         sprite.setScale(scale, scale);
                         displayMap.push_back(sprite);
                     }
-
                 }
             }
         }
     }
-
-    return { displayMap, displayGround };
-
 }
 
+vector<Sprite> Level::recup_display_map()
+{
+    return displayMap;
+}
 
+vector<Sprite> Level::recup_display_ground()
+{
+    return displayGround;
+}
 

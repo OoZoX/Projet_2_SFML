@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+
 class Level
 {
 
@@ -137,6 +138,8 @@ private:
     };
 
 public:
-    vector<vector<Sprite>> displayLevel(Texture& texture);
+    void displayLevel(Texture& texture);
+    vector<Sprite> recup_display_map();
+    vector<Sprite> recup_display_ground();
 };
 
