@@ -1,6 +1,7 @@
 
 *.big.txt
 
+*.vcxproj
 *.orig
 *.big.txt
 *.pbm
