@@ -151,23 +151,24 @@ namespace level {
 }
 
 
+
 vector<vector<Sprite>> display_map(Texture& texture) {
     vector<Sprite> aff_map;
     vector<Sprite> aff_sol;
     const int multi_size = 16;
     const int val_scale = 4;
-    
+
     for (int i = 0; i < level::tile_strings.size(); i++)
     {
         string ligne = level::tile_strings[i];
-        for (int u = 0; u < ligne.size() /3; u++)
+        for (int u = 0; u < ligne.size() / 3; u++)
         {
 
-            string lettres = ligne.substr(u*3, 2);
+            string lettres = ligne.substr(u * 3, 2);
             if (level::aliasses.count(lettres) || lettres == "  ")
             {
                 string recup_key1 = level::aliasses[lettres];
-                if (level::tile_offsets.count(recup_key1)|| lettres == "  ")
+                if (level::tile_offsets.count(recup_key1) || lettres == "  ")
                 {
                     vec2i position = level::tile_offsets[recup_key1];
 
@@ -175,7 +176,7 @@ vector<vector<Sprite>> display_map(Texture& texture) {
 
                     Sprite sol;
 
-                    
+
                     sol.setTexture(texture);
                     sol.setTextureRect(IntRect(4 * multi_size, 6 * multi_size, multi_size, multi_size));
                     sol.setPosition(u * multi_size * val_scale, i * multi_size * val_scale);
@@ -192,7 +193,7 @@ vector<vector<Sprite>> display_map(Texture& texture) {
                     }
 
                 }
-                else 
+                else
                 {
                     cout << "Erreur Key 2 !!! ---------------- \n";
                 }
@@ -208,48 +209,191 @@ vector<vector<Sprite>> display_map(Texture& texture) {
 
     }
 
-    return {aff_map, aff_sol};
+    return { aff_map, aff_sol };
 
 }
 
-void normalize(Vector2f& velocity, float speed) 
+void normalize(Vector2f& velocity, float speed)
 {
-    
+
     float norme = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y));
     if (norme != 0)
     {
         velocity.x = ((velocity.x) / norme) * speed;
         velocity.y = ((velocity.y) / norme) * speed;
     }
-    
+
+}
+
+
+map<string, vec2i> tile_perso = {
+    {"bas", {1,0}},
+    {"bas-1", {0,0}},
+    {"bas-2", {2,0}},
+    {"gauche", {1,1}},
+    {"gauche-1", {0,1}},
+    {"gauche-2", {2,1}},
+    {"droite", {1,2}},
+    {"droite-1",{0,2}},
+    {"droite-2", {2,2}},
+    {"haut", {1,3}},
+    {"haut-1", {0,3}},
+    {"haut-2", {2,3}}
+};
+
+
+map<string, IntRect> add_sprite_perso(Texture& texture_perso)
+{
+    map<string, IntRect> IntRect_perso;
+
+    for (auto & tile : tile_perso)
+    {
+        IntRect_perso[tile.first] = IntRect(tile.second.x * 16, tile.second.y * 16, 16, 16);
+    }
+
+    return IntRect_perso;
 }
 
 enum Keys { UP, DOWN, LEFT, RIGHT, SPACE, KEY_MAX };
 bool activeKeys[KEY_MAX] = { false };
 
+
+void mouve_sprite(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& perso, map<string, IntRect>& IntRectPerso)
+{
+    Time time1 = seconds(0.5f);
+    Time time2 = seconds(0.25f);
+
+    if (activeKeys[DOWN])
+    {
+        if (velocity.y > 0) 
+        {
+            if (timer >= time1)
+            {
+                timer = clock.restart();
+
+                perso.setTextureRect(IntRectPerso["bas-2"]);
+            }
+
+            else if (timer >= time2)
+            {
+                perso.setTextureRect(IntRectPerso["bas-1"]);
+            }
+        }
+
+        else
+        {
+            perso.setTextureRect(IntRectPerso["bas"]);
+        }
+        
+    }
+    else if (activeKeys[UP])
+    {
+        if (velocity.y < 0)
+        {
+            if (timer >= time1)
+            {
+                timer = clock.restart();
+                perso.setTextureRect(IntRectPerso["haut-2"]);
+            }
+
+            else if (timer >= time2)
+            {
+                perso.setTextureRect(IntRectPerso["haut-1"]);
+            }
+        }
+
+        else
+        {
+            perso.setTextureRect(IntRectPerso["haut"]);
+        }
+
+    }
+    else if (activeKeys[RIGHT])
+    {
+        if (velocity.x > 0)
+        {
+            if (timer >= time1)
+            {
+                timer = clock.restart();
+                perso.setTextureRect(IntRectPerso["droite-2"]);
+            }
+
+            else if (timer >= time2)
+            {
+                perso.setTextureRect(IntRectPerso["droite-1"]);
+            }
+        }
+
+        else
+        {
+            perso.setTextureRect(IntRectPerso["droite"]);
+        }
+
+    }
+    else if (activeKeys[LEFT])
+    {
+        if (velocity.x < 0)
+        {
+            if (timer >= time1)
+            {
+                timer = clock.restart();
+                perso.setTextureRect(IntRectPerso["gauche-2"]);
+            }
+
+            else if (timer >= time2)
+            {
+                perso.setTextureRect(IntRectPerso["gauche-1"]);
+            }
+        }
+
+        else
+        {
+            perso.setTextureRect(IntRectPerso["gauche"]);
+        }
+    }
+}
+
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(768, 512), "SFML works!");
-    Texture texture;
-    texture.loadFromFile("foresttiles2-t.png");
-    vector<vector<Sprite>> recup_map = display_map(texture);
-    Texture texture2;
-    texture2.loadFromFile("characters.png");
+
+
+    Texture texture_map;
+    texture_map.loadFromFile("foresttiles2-t.png");
+    vector<vector<Sprite>> recup_map = display_map(texture_map);
+
+
+    Texture texture_perso;
+    texture_perso.loadFromFile("characters.png");
+
     Sprite character;
-    character.setTexture(texture2);
+    character.setPosition(50, 50);
+    character.setTexture(texture_perso);
+
     character.setTextureRect(IntRect(1 * 16, 0 * 16, 16, 16));
     character.setScale(3, 3);
-    character.setPosition(50, 50);
-    float vit = 0.1f;
+    
 
+    map<string, IntRect> IntRectPerso = add_sprite_perso(texture_perso);
+    
+    Time mesure_temp = seconds(0.1f);
+
+    window.setFramerateLimit(60);
 
     sf::Vector2f velocity;
-    float speed = 1.0f;
+    float speed = 2.0f;
 
+    Clock clock;
+    Time timer;
+    
+
+    sf::Event event;
 
     while (window.isOpen())
     {
-        sf::Event event;
+        timer = clock.getElapsedTime();
+        
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -274,6 +418,10 @@ int main()
                 if (event.key.code == sf::Keyboard::D) { activeKeys[RIGHT] = false; }
             }
         }
+        cout << "ccc" << timer.asSeconds() << endl;
+        mouve_sprite(timer, clock, velocity, character, IntRectPerso);
+        //cout << "ddd" << timer.asSeconds() << endl;
+
         if (activeKeys[UP] == false) { velocity.y -= velocity.y; cout << "false" << endl; }
         if (activeKeys[LEFT] == false) { velocity.x -= velocity.x; }
         if (activeKeys[RIGHT] == false) { velocity.x -= velocity.x; }
@@ -289,7 +437,7 @@ int main()
 
 
         cout << velocity.x << velocity.y << endl;
-        //normalize(velocity, speed);
+        normalize(velocity, speed);
         character.move(velocity);
 
         /*
@@ -311,7 +459,7 @@ int main()
         }
         */
 
-        /*
+        
         if (character.getPosition().x <= 0)
         {
             character.setPosition(0, character.getPosition().y);
@@ -330,7 +478,7 @@ int main()
         }
 
 
-        */
+        
 
         for (int i = 0; i < recup_map[1].size(); i++)
         {
