@@ -1,138 +1,19 @@
 #include <SFML/Graphics.hpp>
-using namespace sf;
-using namespace std;
+#include "manager.h"
+#include "player.h"
+#include "ennemy.h"
+#include "level.h"
+
+
 #include <map>
 #include <iostream>
+
 typedef Vector2f vec2;
 typedef Vector2i vec2i;
 
+using namespace sf;
+using namespace std;
 
-
-
-void moveHero(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& hero, map<string, IntRect>& IntRectHero, Keys& exKey)
-{
-    Time time1 = seconds(0.5f);
-    Time time2 = seconds(0.25f);
-
-    if (activeKeys[DOWN])
-    {
-        exKey = Keys::DOWN;
-        if (velocity.y > 0) 
-        {
-            if (timer >= time1)
-            {
-                timer = clock.restart();
-
-                hero.setTextureRect(IntRectHero["bas-2"]);
-            }
-
-            else if (timer >= time2)
-            {
-                hero.setTextureRect(IntRectHero["bas-1"]);
-            }
-        }
-        
-    }
-    else if (activeKeys[UP])
-    {
-        exKey = Keys::UP;
-        if (velocity.y < 0)
-        {
-            if (timer >= time1)
-            {
-                timer = clock.restart();
-                hero.setTextureRect(IntRectHero["haut-2"]);
-            }
-
-            else if (timer >= time2)
-            {
-                hero.setTextureRect(IntRectHero["haut-1"]);
-            }
-        }
-
-
-    }
-    else if (activeKeys[RIGHT])
-    {
-        exKey = Keys::RIGHT;
-        if (velocity.x > 0)
-        {
-            if (timer >= time1)
-            {
-                timer = clock.restart();
-                hero.setTextureRect(IntRectHero["droite-2"]);
-            }
-
-            else if (timer >= time2)
-            {
-                hero.setTextureRect(IntRectHero["droite-1"]);
-            }
-        }
-
-
-    }
-    else if (activeKeys[LEFT])
-    {
-        exKey = Keys::LEFT;
-        if (velocity.x < 0)
-        {
-            if (timer >= time1)
-            {
-                timer = clock.restart();
-                hero.setTextureRect(IntRectHero["gauche-2"]);
-            }
-
-            else if (timer >= time2)
-            {
-                hero.setTextureRect(IntRectHero["gauche-1"]);
-            }
-        }
-
-    }
-    else if (exKey == Keys::DOWN)
-    {
-        hero.setTextureRect(IntRectHero["bas"]);
-    }
-    else if (exKey == Keys::UP)
-    {
-        hero.setTextureRect(IntRectHero["haut"]);
-    }
-    else if (exKey == Keys::RIGHT)
-    {
-        hero.setTextureRect(IntRectHero["droite"]);
-    }
-    else if (exKey == Keys::LEFT)
-    {
-        hero.setTextureRect(IntRectHero["gauche"]);
-    }
-}
-
-map<string, vec2i> ennemyTiles = {
-    {"bas", {1,4}},
-    {"bas-1", {0,4}},
-    {"bas-2", {2,4}},
-    {"gauche", {1,5}},
-    {"gauche-1", {0,5}},
-    {"gauche-2", {2,5}},
-    {"droite", {1,6}},
-    {"droite-1",{0,6}},
-    {"droite-2", {2,6}},
-    {"haut", {1,7}},
-    {"haut-1", {0,7}},
-    {"haut-2", {2,7}}
-};
-
-map<string, IntRect> addEnnemySprite()
-{
-    map<string, IntRect> IntRectEnnemy;
-
-    for (auto& tile : ennemyTiles)
-    {
-        IntRectEnnemy[tile.first] = IntRect(tile.second.x * 16, tile.second.y * 16, 16, 16);
-    }
-
-    return IntRectEnnemy;
-}
 
 void moveEnnemy(sf::Time& timer, Clock& clock, Sprite& ennemy, map<string, IntRect>& IntRectEnnemy)
 {
@@ -196,7 +77,10 @@ void moveEnnemy(sf::Time& timer, Clock& clock, Sprite& ennemy, map<string, IntRe
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(768, 512), "SFML works!");
+    // lancement des class //
+    RenderWindow window(VideoMode(768, 512), "SFML works!");
+    Manager manager;
+    Player hero;
 
     Texture mapTexture;
     mapTexture.loadFromFile("foresttiles2-t.png");
@@ -225,7 +109,7 @@ int main()
     Clock clock;
     Time timer;
     Time mesureTemp = seconds(0.1f);
-    Keys exKey = Keys::DOWN;
+
     window.setFramerateLimit(60);
 
     sf::Event event;

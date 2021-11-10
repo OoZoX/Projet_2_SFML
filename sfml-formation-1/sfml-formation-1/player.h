@@ -3,17 +3,20 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+
 enum Keys { UP, DOWN, LEFT, RIGHT, SPACE, KEY_MAX };
 
-class Player
+class Player : public Manager
 {
 
 private:
 	sf::Sprite player;
+
     sf::Vector2f velocity = {0.0f, 0.0f};
     float speed;
 
     bool activeKeys[KEY_MAX] = { false };
+    Keys exKey = DOWN;
 
 	std::map<std::string, sf::Vector2i> heroTiles = {
     {"bas", {1,0}},
@@ -33,9 +36,14 @@ private:
     std::map<std::string, sf::IntRect> IntRectHero;
 
 public:
+    Player player();
+
     void normalize();
 
     void update_player(sf::Sprite update_player);
 
     void addHeroSprite();
+
+    void moveHero(Manager& manager);
+
 };

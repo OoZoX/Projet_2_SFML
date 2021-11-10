@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClCompile Include="ennemy.cpp" />
     <ClCompile Include="level.cpp" />
+    <ClCompile Include="manager.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -159,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="ennemy.h" />
     <ClInclude Include="level.h" />
+    <ClInclude Include="manager.h" />
     <ClInclude Include="player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

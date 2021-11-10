@@ -7,8 +7,7 @@ typedef Vector2i vec2i;
 
 
 vector<vector<Sprite>> Level::displayLevel(Texture& texture) {
-    vector<Sprite> displayMap;
-    vector<Sprite> displayGround;
+
     const int size = 16;
     const int scale = 4;
 
