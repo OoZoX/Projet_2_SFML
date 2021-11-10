@@ -258,13 +258,14 @@ enum Keys { UP, DOWN, LEFT, RIGHT, SPACE, KEY_MAX };
 bool activeKeys[KEY_MAX] = { false };
 
 
-void mouve_sprite(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& perso, map<string, IntRect>& IntRectPerso)
+void mouve_sprite(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& perso, map<string, IntRect>& IntRectPerso, Keys& ex_key)
 {
     Time time1 = seconds(0.5f);
     Time time2 = seconds(0.25f);
 
     if (activeKeys[DOWN])
     {
+        ex_key = Keys::DOWN;
         if (velocity.y > 0) 
         {
             if (timer >= time1)
@@ -279,15 +280,11 @@ void mouve_sprite(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& pers
                 perso.setTextureRect(IntRectPerso["bas-1"]);
             }
         }
-
-        else
-        {
-            perso.setTextureRect(IntRectPerso["bas"]);
-        }
         
     }
     else if (activeKeys[UP])
     {
+        ex_key = Keys::UP;
         if (velocity.y < 0)
         {
             if (timer >= time1)
@@ -302,14 +299,11 @@ void mouve_sprite(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& pers
             }
         }
 
-        else
-        {
-            perso.setTextureRect(IntRectPerso["haut"]);
-        }
 
     }
     else if (activeKeys[RIGHT])
     {
+        ex_key = Keys::RIGHT;
         if (velocity.x > 0)
         {
             if (timer >= time1)
@@ -324,14 +318,11 @@ void mouve_sprite(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& pers
             }
         }
 
-        else
-        {
-            perso.setTextureRect(IntRectPerso["droite"]);
-        }
 
     }
     else if (activeKeys[LEFT])
     {
+        ex_key = Keys::LEFT;
         if (velocity.x < 0)
         {
             if (timer >= time1)
@@ -346,10 +337,22 @@ void mouve_sprite(sf::Time& timer, Clock& clock, Vector2f velocity, Sprite& pers
             }
         }
 
-        else
-        {
-            perso.setTextureRect(IntRectPerso["gauche"]);
-        }
+    }
+    else if (ex_key == Keys::DOWN)
+    {
+        perso.setTextureRect(IntRectPerso["bas"]);
+    }
+    else if (ex_key == Keys::UP)
+    {
+        perso.setTextureRect(IntRectPerso["haut"]);
+    }
+    else if (ex_key == Keys::RIGHT)
+    {
+        perso.setTextureRect(IntRectPerso["droite"]);
+    }
+    else if (ex_key == Keys::LEFT)
+    {
+        perso.setTextureRect(IntRectPerso["gauche"]);
     }
 }
 
@@ -382,6 +385,9 @@ int main()
     slime.setScale(3, 3);
     slime.setPosition(330, 0);
     float vit = 0.1f;
+
+
+    Keys ex_key = Keys::DOWN;
 
     map<string, IntRect> IntRectPerso = add_sprite_perso(texture_perso);
     
@@ -427,7 +433,7 @@ int main()
             }
         }
         cout << "ccc" << timer.asSeconds() << endl;
-        mouve_sprite(timer, clock, velocity, character, IntRectPerso);
+        mouve_sprite(timer, clock, velocity, character, IntRectPerso, ex_key);
         //cout << "ddd" << timer.asSeconds() << endl;
 
         if (activeKeys[UP] == false) { velocity.y -= velocity.y; cout << "false" << endl; }
