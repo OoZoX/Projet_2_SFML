@@ -7,20 +7,20 @@ typedef Vector2f vec2;
 typedef Vector2i vec2i;
 /*
 Dans cet example, vous allez devoir charger et afficher un tileset
-Vous devrez charger plusieurs sprites, de préférences dans un vector<>.
+Vous devrez charger plusieurs sprites, de prï¿½fï¿½rences dans un vector<>.
 Vous devrez utiliser la fonction Sprite::setTextureRect() qui prend un IntRect en argument.
 
 Un IntRect est un struct POD (plain old data type) contenant une origine et une taille, en entier.
 
-Cette fonction permet de n'afficher que une certaine région de texture dans votre Sprite.
+Cette fonction permet de n'afficher que une certaine rï¿½gion de texture dans votre Sprite.
 
-Je vous ai fourni un niveau à charger, une std::map<string,string> et une std::map<string, Vector2i> préremplies, et une image qui permet de visualiser la disposition des tiles.
+Je vous ai fourni un niveau ï¿½ charger, une std::map<string,string> et une std::map<string, Vector2i> prï¿½remplies, et une image qui permet de visualiser la disposition des tiles.
 
-Votre travail consiste à écrire la fonction load_level(), qui doit:
+Votre travail consiste ï¿½ ï¿½crire la fonction load_level(), qui doit:
 * instancier les Sprite et appeler la fonction setTextureRect() sur chacun d'entre eux.
 * positionner les Sprites
 Les tiles font 16x16px, il faudra donc multiplier par 16 les offset fournis dans la map
-Il sera nécessaire de charger deux grilles de tiles, la première étant celle du sol, et l'autre des objets.
+Il sera nï¿½cessaire de charger deux grilles de tiles, la premiï¿½re ï¿½tant celle du sol, et l'autre des objets.
 
 */
 
@@ -373,7 +373,15 @@ int main()
 
     character.setTextureRect(IntRect(1 * 16, 0 * 16, 16, 16));
     character.setScale(3, 3);
-    
+    character.setPosition(50, 50);
+    Texture slimeTexture;
+    slimeTexture.loadFromFile("characters.png");
+    Sprite slime;
+    slime.setTexture(slimeTexture);
+    slime.setTextureRect(IntRect(1 * 16, 4 * 16, 16, 16));
+    slime.setScale(3, 3);
+    slime.setPosition(330, 0);
+    float vit = 0.1f;
 
     map<string, IntRect> IntRectPerso = add_sprite_perso(texture_perso);
     
@@ -428,17 +436,33 @@ int main()
         if (activeKeys[DOWN] == false) { velocity.y -= velocity.y; }
 
 
-        if (activeKeys[UP]) { velocity.y -= speed; cout << "--------aa" << velocity.y << "----------" << endl; }
+        if (activeKeys[UP]) { velocity.y -= speed; }
         if (activeKeys[LEFT]) {velocity.x -= speed; }
         if (activeKeys[RIGHT]) { velocity.x += speed; }
-        if (activeKeys[DOWN]) { velocity.y += speed; cout << "--------bb" << velocity.y << "----------" << endl;
-        }
+        if (activeKeys[DOWN]) { velocity.y += speed; }
         
 
 
         cout << velocity.x << velocity.y << endl;
         normalize(velocity, speed);
         character.move(velocity);
+
+        if (slime.getPosition().x >= 266 && int(slime.getPosition().y) == 0)
+        {
+            slime.move(-0.05, 0);
+        }
+        else if (slime.getPosition().y <= 72 && int(slime.getPosition().x) == 265)
+        {
+            slime.move(0, 0.05);
+        }
+        else if (slime.getPosition().x <= 330 && int(slime.getPosition().y) == 72)
+        {
+            slime.move(0.05, 0);
+        }
+        else if (slime.getPosition().y >= 0 && int(slime.getPosition().x) == 330)
+        {
+            slime.move(0, -0.05);
+        }
 
         /*
         if (activeKeys[UP] && activeKeys[LEFT])
@@ -464,17 +488,17 @@ int main()
         {
             character.setPosition(0, character.getPosition().y);
         }
-        if (character.getPosition().x >= 590)
+        if (character.getPosition().x >= 720)
         {
-            character.setPosition(590, character.getPosition().y);
+            character.setPosition(720, character.getPosition().y);
         }
 
         if (character.getPosition().y <= 0) {
             character.setPosition(character.getPosition().x, 0);
 
         }
-        if (character.getPosition().y >= 580) {
-            character.setPosition(character.getPosition().x, 580);
+        if (character.getPosition().y >= 464) {
+            character.setPosition(character.getPosition().x, 464);
         }
 
 
@@ -488,6 +512,8 @@ int main()
         {
             window.draw(recup_map[0][i]);
         }
+
+        window.draw(slime);
         window.draw(character);
         window.display();
         window.clear();
