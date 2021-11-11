@@ -45,15 +45,17 @@ public:
 
     void update_player_position(int _x, int _y);
 
-    void update_player_texture(sf::Texture texture);
+    void update_player_texture(sf::Texture& texture);
 
     void update_player_texture_rect(sf::IntRect tile_hero);
 
     void update_player_scale(int scale_x, int scale_y);
 
+    void update_player_move();
+
     void addHeroSprite();
 
-    void moveHero(Manager& manager);
+    void anim_hero(Manager& manager);
 
     void recup_event_player(sf::Event& event, sf::RenderWindow& window);
 

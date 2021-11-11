@@ -58,12 +58,14 @@ int main()
             hero.recup_event_player(event, window); // check les touche appuyé 
         }
 
+        
+        hero.check_stop_move();
         hero.normalize();
-        hero.moveHero(manager);
+        hero.anim_hero(manager);
 
         slime.moveEnnemy(manager);
 
-        hero.check_stop_move();
+        
 
         hero.limite_map();
         slime.move();

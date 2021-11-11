@@ -5,12 +5,13 @@
 class Manager
 {
 protected:
-	sf::Clock clock;
+
 
 public:
 	Manager();
 	void update_current_time();
 	sf::Time timer_player;
 	sf::Time timer_slime;
+	sf::Clock clock;
 };
 

@@ -22,6 +22,7 @@ void Player::normalize()
         velocity.x = ((velocity.x) / norme) * speed;
         velocity.y = ((velocity.y) / norme) * speed;
     }
+    update_player_move();
 }
 
 void Player::update_player_position(int x, int y)
@@ -29,19 +30,26 @@ void Player::update_player_position(int x, int y)
     hero.setPosition(x, y);
 }
 
-void Player::update_player_texture(Texture texture)
+void Player::update_player_texture(Texture& texture)
 {
     hero.setTexture(texture);
+    
 }
 
 void Player::update_player_texture_rect(IntRect tile_hero)
 {
     hero.setTextureRect(tile_hero);
+    
 }
 
 void Player::update_player_scale(int scale_x, int scale_y)
 {
     hero.setScale(scale_x, scale_y);
+}
+
+void Player::update_player_move()
+{
+    hero.move(velocity.x, velocity.y);
 }
 
 
@@ -50,29 +58,34 @@ void Player::addHeroSprite()
     for (auto& tile : heroTiles)
     {
         IntRectHero[tile.first] = IntRect(tile.second.x * 16, tile.second.y * 16, 16, 16);
+        
     }
 }
 
 
-void Player::moveHero(Manager& manager)
+void Player::anim_hero(Manager& manager)
 {
     Time time1 = seconds(0.5f);
     Time time2 = seconds(0.25f);
 
     if (activeKeys[DOWN])
     {
+        cout << "DOWN" << endl;
         exKey = Keys::DOWN;
         if (velocity.y > 0)
         {
-            if (timer_player >= time1)
+            cout << "velocity" << endl;
+            if (manager.timer_player >= time1)
             {
-                manager.timer_player = Manager::clock.restart();
+                cout << "timer1" << endl;
+                manager.timer_player = manager.clock.restart();
 
                 hero.setTextureRect(IntRectHero["bas-2"]);
             }
 
-            else if (timer_player >= time2)
+            else if (manager.timer_player >= time2)
             {
+                cout << "timer2" << endl;
                 hero.setTextureRect(IntRectHero["bas-1"]);
             }
         }
@@ -83,13 +96,13 @@ void Player::moveHero(Manager& manager)
         exKey = Keys::UP;
         if (velocity.y < 0)
         {
-            if (timer_player >= time1)
+            if (manager.timer_player >= time1)
             {
-                manager.timer_player = Manager::clock.restart();
+                manager.timer_player = manager.clock.restart();
                 hero.setTextureRect(IntRectHero["haut-2"]);
             }
 
-            else if (timer_player >= time2)
+            else if (manager.timer_player >= time2)
             {
                 hero.setTextureRect(IntRectHero["haut-1"]);
             }
@@ -102,13 +115,13 @@ void Player::moveHero(Manager& manager)
         exKey = Keys::RIGHT;
         if (velocity.x > 0)
         {
-            if (timer_player >= time1)
+            if (manager.timer_player >= time1)
             {
-                timer_player = Manager::clock.restart();
+                manager.timer_player = manager.clock.restart();
                 hero.setTextureRect(IntRectHero["droite-2"]);
             }
 
-            else if (timer_player >= time2)
+            else if (manager.timer_player >= time2)
             {
                 hero.setTextureRect(IntRectHero["droite-1"]);
             }
@@ -121,13 +134,13 @@ void Player::moveHero(Manager& manager)
         exKey = Keys::LEFT;
         if (velocity.x < 0)
         {
-            if (timer_player >= time1)
+            if (manager.timer_player >= time1)
             {
-                manager.timer_player = Manager::clock.restart();
+                manager.timer_player = manager.clock.restart();
                 hero.setTextureRect(IntRectHero["gauche-2"]);
             }
 
-            else if (timer_player >= time2)
+            else if (manager.timer_player >= time2)
             {
                 hero.setTextureRect(IntRectHero["gauche-1"]);
             }
@@ -161,6 +174,7 @@ void Player::recup_event_player(Event& event, RenderWindow& window)
         if (event.key.code == sf::Keyboard::Z || event.key.code == sf::Keyboard::W)
         {
             activeKeys[UP] = true;
+            cout << "ok" << endl;
         }
         else if (event.key.code == sf::Keyboard::Q || event.key.code == sf::Keyboard::A)
         {
@@ -203,7 +217,8 @@ void Player::check_stop_move()
     if (activeKeys[LEFT] == false) { velocity.x -= velocity.x; }
     if (activeKeys[RIGHT] == false) { velocity.x -= velocity.x; }
     if (activeKeys[DOWN] == false) { velocity.y -= velocity.y; }
-    if (activeKeys[UP]) { velocity.y -= speed; }
+
+    if (activeKeys[UP]) { velocity.y -= speed; cout << "ooooooo" << endl; }
     if (activeKeys[LEFT]) { velocity.x -= speed; }
     if (activeKeys[RIGHT]) { velocity.x += speed; }
     if (activeKeys[DOWN]) { velocity.y += speed; }

@@ -25,52 +25,52 @@ void Ennemy::moveEnnemy(Manager& manager)
     Time time2 = seconds(0.25f);
     if (_ennemy.getPosition().x >= 266 && int(_ennemy.getPosition().y) == 0)
     {
-        if (timer_slime >= time1)
+        if (manager.timer_slime >= time1)
         {
-            timer_slime = clock.restart();
+            manager.timer_slime = manager.clock.restart();
             _ennemy.setTextureRect(IntRectEnnemy["gauche-2"]);
         }
 
-        else if (timer_slime >= time2)
+        else if (manager.timer_slime >= time2)
         {
             _ennemy.setTextureRect(IntRectEnnemy["gauche-1"]);
         }
     }
     else if (_ennemy.getPosition().y <= 72 && int(_ennemy.getPosition().x) == 265)
     {
-        if (timer_slime >= time1)
+        if (manager.timer_slime >= time1)
         {
-            timer_slime = clock.restart();
+            manager.timer_slime = manager.clock.restart();
             _ennemy.setTextureRect(IntRectEnnemy["bas-2"]);
         }
 
-        else if (timer_slime >= time2)
+        else if (manager.timer_slime >= time2)
         {
             _ennemy.setTextureRect(IntRectEnnemy["bas-1"]);
         }
     }
     else if (_ennemy.getPosition().x <= 330 && int(_ennemy.getPosition().y) == 73)
     {
-        if (timer_slime >= time1)
+        if (manager.timer_slime >= time1)
         {
-            timer_slime = clock.restart();
+            manager.timer_slime = manager.clock.restart();
             _ennemy.setTextureRect(IntRectEnnemy["droite-2"]);
         }
 
-        else if (timer_slime >= time2)
+        else if (manager.timer_slime >= time2)
         {
             _ennemy.setTextureRect(IntRectEnnemy["droite-1"]);
         }
     }
     else if (_ennemy.getPosition().y >= 0 && int(_ennemy.getPosition().x) == 331)
     {
-        if (timer_slime >= time1)
+        if (manager.timer_slime >= time1)
         {
-            timer_slime = clock.restart();
+            manager.timer_slime = manager.clock.restart();
             _ennemy.setTextureRect(IntRectEnnemy["haut-2"]);
         }
 
-        else if (timer_slime >= time2)
+        else if (manager.timer_slime >= time2)
         {
             _ennemy.setTextureRect(IntRectEnnemy["haut-1"]);
         }
@@ -98,7 +98,7 @@ void Ennemy::move()
     }
 }
 
-void Ennemy::update_ennemy_texture(Texture texture)
+void Ennemy::update_ennemy_texture(Texture& texture)
 {
     _ennemy.setTexture(texture);
 }
