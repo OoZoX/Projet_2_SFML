@@ -19,11 +19,13 @@ void Ennemy::addEnnemySprite()
     }
 }
 
-void Ennemy::moveEnnemy(Manager& manager)
+void Ennemy::anim_ennemy(Manager& manager)
 {
     Time time1 = seconds(0.5f);
     Time time2 = seconds(0.25f);
-    if (_ennemy.getPosition().x >= 266 && int(_ennemy.getPosition().y) == 0)
+
+
+    if (velocity.x < 0 && velocity.y < velocity.x)
     {
         if (manager.timer_slime >= time1)
         {
@@ -36,7 +38,7 @@ void Ennemy::moveEnnemy(Manager& manager)
             _ennemy.setTextureRect(IntRectEnnemy["gauche-1"]);
         }
     }
-    else if (_ennemy.getPosition().y <= 72 && int(_ennemy.getPosition().x) == 265)
+    else if (velocity.y > 0 && velocity.x < velocity.y)
     {
         if (manager.timer_slime >= time1)
         {
@@ -49,7 +51,7 @@ void Ennemy::moveEnnemy(Manager& manager)
             _ennemy.setTextureRect(IntRectEnnemy["bas-1"]);
         }
     }
-    else if (_ennemy.getPosition().x <= 330 && int(_ennemy.getPosition().y) == 73)
+    else if (velocity.x > 0 && velocity.y < velocity.x)
     {
         if (manager.timer_slime >= time1)
         {
@@ -62,7 +64,7 @@ void Ennemy::moveEnnemy(Manager& manager)
             _ennemy.setTextureRect(IntRectEnnemy["droite-1"]);
         }
     }
-    else if (_ennemy.getPosition().y >= 0 && int(_ennemy.getPosition().x) == 331)
+    else if (velocity.y < 0 && velocity.x < velocity.y)
     {
         if (manager.timer_slime >= time1)
         {
@@ -81,25 +83,6 @@ void Ennemy::moveEnnemy(Manager& manager)
 void Ennemy::move()
 {
     _ennemy.move(velocity);
-    
-
-    /*
-    if (_ennemy.getPosition().x >= 266 && int(_ennemy.getPosition().y) == 0)
-    {
-        _ennemy.move(-1, 0);
-    }
-    else if (_ennemy.getPosition().y <= 72 && int(_ennemy.getPosition().x) == 265)
-    {
-        _ennemy.move(0, 1);
-    }
-    else if (_ennemy.getPosition().x <= 330 && int(_ennemy.getPosition().y) == 73)
-    {
-        _ennemy.move(1, 0);
-    }
-    else if (_ennemy.getPosition().y >= 0 && int(_ennemy.getPosition().x) == 331)
-    {
-        _ennemy.move(0, -1);
-    }   */
 }
 
 void Ennemy::update_ennemy_texture(Texture& texture)
@@ -124,6 +107,7 @@ void Ennemy::update_ennemy_position()
 
 void Ennemy::deplacement_ennemy(Manager& manager)
 {
+    float check_range = 3.0f;
     float distance = 0.0f;
     Vector2i dist_vecteur = { 0, 0 };
     // Pour le temps -> manager.timer_dep_ennemy
@@ -134,13 +118,12 @@ void Ennemy::deplacement_ennemy(Manager& manager)
             
             Vector2f pos_actu = _ennemy.getPosition();
             Vector2f pos_point = chemin[0];
-            if (sqrt((pos_point.x - pos_actu.x) * (pos_point.x - pos_actu.x)) <= 4.0f && sqrt((pos_point.y - pos_actu.y) * (pos_point.y - pos_actu.y)) <= 4.0f)
+            if (sqrt((pos_point.x - pos_actu.x) * (pos_point.x - pos_actu.x)) <= check_range && sqrt((pos_point.y - pos_actu.y) * (pos_point.y - pos_actu.y)) <= check_range)
             {
-
-
                 if (check_calcul == true)
                 {
                     _ennemy.setPosition(chemin[0]);
+                    cout << _ennemy.getPosition().x << endl;
                     index = 0;
                     check_calcul = false;
                     manager.timer_dep_ennemy = manager.clock.restart();
@@ -179,15 +162,15 @@ void Ennemy::deplacement_ennemy(Manager& manager)
             
             Vector2f pos_actu = _ennemy.getPosition();
             Vector2f pos_point = chemin[index +1];
-            if (sqrt((pos_point.x - pos_actu.x) * (pos_point.x - pos_actu.x)) <= 4.0f && sqrt((pos_point.y - pos_actu.y) * (pos_point.y - pos_actu.y)) <= 4.0f)
+            if (sqrt((pos_point.x - pos_actu.x) * (pos_point.x - pos_actu.x)) <= check_range && sqrt((pos_point.y - pos_actu.y) * (pos_point.y - pos_actu.y)) <= check_range)
             {
-            
-            if (check_calcul == true)
-            {
-                index += 1;
-                check_calcul = false;
-                manager.timer_dep_ennemy = manager.clock.restart();
-            }
+                if (check_calcul == true)
+                {
+                    cout << _ennemy.getPosition().x << endl;
+                    index += 1;
+                    check_calcul = false;
+                    manager.timer_dep_ennemy = manager.clock.restart();
+                }
             }
             if (check_calcul == false && index < chemin.size()-1)
             {
@@ -215,4 +198,14 @@ void Ennemy::deplacement_ennemy(Manager& manager)
 
         }
     
+}
+
+void Ennemy::set_navigation_ennemi(vector<Vector2f> new_chemin)
+{
+    chemin = new_chemin;
+}
+
+void Ennemy::set_tile_anim(map<string, Vector2i> new_ennemy_tile)
+{
+    ennemyTiles = new_ennemy_tile;
 }

@@ -15,13 +15,11 @@ typedef Vector2f vec2;
 typedef Vector2i vec2i;
 
 
-
-
 int main()
 {
     sf::Event event;
 
-    RenderWindow window(VideoMode(1500, 1000), "SFML works!");    //768, 512
+    RenderWindow window(VideoMode(768, 512), "SFML works!");    //768, 512
     window.setKeyRepeatEnabled(false);
     window.setFramerateLimit(60);
 
@@ -30,10 +28,10 @@ int main()
     Level level;    //creation map 
     Texture mapTexture;
     mapTexture.loadFromFile("foresttiles2-t.png");     // set la texture 
-    level.displayLevel(mapTexture); // dessine le level et staoque dans des evcteur de la class
+    level.displayLevel(mapTexture); // dessine le level et stoque dans des evcteur de la class
 
     Texture charactere_texture;
-    charactere_texture.loadFromFile("characters.png");
+    charactere_texture.loadFromFile("characters.png");  //stoque texure pour perso et ennemis
 
     Player hero;    // creation hero / player
     hero.update_player_position(50, 50);
@@ -44,10 +42,36 @@ int main()
 
     Ennemy slime;   // creation slime
     slime.update_ennemy_texture(charactere_texture);
+    slime.set_tile_anim
+    (
+        {
+            {"bas", {1,4}},
+            {"bas-1", {0,4}},
+            {"bas-2", {2,4}},
+            {"gauche", {1,5}},
+            {"gauche-1", {0,5}},
+            {"gauche-2", {2,5}},
+            {"droite", {1,6}},
+            {"droite-1",{0,6}},
+            {"droite-2", {2,6}},
+            {"haut", {1,7}},
+            {"haut-1", {0,7}},
+            {"haut-2", {2,7}}
+        }
+    );
     slime.update_ennemy_texture_rect(IntRect(1 * 16, 4 * 16, 16, 16));
     slime.update_ennemy_scale(3, 3);
-    slime.update_ennemy_position();
     slime.addEnnemySprite();
+    slime.set_navigation_ennemi
+    (
+        {
+            sf::Vector2f(100, 100),
+            sf::Vector2f(200, 150),
+            sf::Vector2f(500, 120),
+            sf::Vector2f(300, 20)
+        }
+    );
+    slime.update_ennemy_position();
 
     while (window.isOpen())
     {
@@ -67,7 +91,8 @@ int main()
 
         slime.deplacement_ennemy(manager);
         slime.move();
-        slime.moveEnnemy(manager);
+        slime.anim_ennemy(manager);
+        
 
         
 
