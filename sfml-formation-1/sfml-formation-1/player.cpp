@@ -13,17 +13,6 @@ Sprite Player::recup_hero()
     return hero;
 }
 
-void Player::normalize()
-{
-
-    float norme = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y));
-    if (norme != 0)
-    {
-        velocity.x = ((velocity.x) / norme) * speed;
-        velocity.y = ((velocity.y) / norme) * speed;
-    }
-    update_player_move();
-}
 
 void Player::update_player_position(int x, int y)
 {
@@ -47,11 +36,14 @@ void Player::update_player_scale(int scale_x, int scale_y)
     hero.setScale(scale_x, scale_y);
 }
 
-void Player::update_player_move()
+void Player::update_player_move(Manager& manager)
 {
-    hero.move(velocity.x, velocity.y);
+    if (sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y)) != 0)
+    {
+        velocity = manager.normalize(velocity, speed);
+    }
+    hero.move(velocity);
 }
-
 
 void Player::addHeroSprite()
 {
@@ -77,7 +69,7 @@ void Player::anim_hero(Manager& manager)
             cout << "velocity" << endl;
             if (manager.timer_player >= time1)
             {
-                cout << "timer1" << endl;
+                
                 manager.timer_player = manager.clock.restart();
 
                 hero.setTextureRect(IntRectHero["bas-2"]);
@@ -85,7 +77,7 @@ void Player::anim_hero(Manager& manager)
 
             else if (manager.timer_player >= time2)
             {
-                cout << "timer2" << endl;
+                
                 hero.setTextureRect(IntRectHero["bas-1"]);
             }
         }
@@ -174,7 +166,7 @@ void Player::recup_event_player(Event& event, RenderWindow& window)
         if (event.key.code == sf::Keyboard::Z || event.key.code == sf::Keyboard::W)
         {
             activeKeys[UP] = true;
-            cout << "ok" << endl;
+            
         }
         else if (event.key.code == sf::Keyboard::Q || event.key.code == sf::Keyboard::A)
         {
@@ -211,18 +203,23 @@ void Player::recup_event_player(Event& event, RenderWindow& window)
     }
 }
 
-void Player::check_stop_move()
+void Player::modif_velocity_player()
 {
     if (activeKeys[UP] == false) { velocity.y -= velocity.y; }
     if (activeKeys[LEFT] == false) { velocity.x -= velocity.x; }
     if (activeKeys[RIGHT] == false) { velocity.x -= velocity.x; }
     if (activeKeys[DOWN] == false) { velocity.y -= velocity.y; }
 
-    if (activeKeys[UP]) { velocity.y -= speed; cout << "ooooooo" << endl; }
+    if (activeKeys[UP]) { velocity.y -= speed; }
     if (activeKeys[LEFT]) { velocity.x -= speed; }
     if (activeKeys[RIGHT]) { velocity.x += speed; }
     if (activeKeys[DOWN]) { velocity.y += speed; }
 
+}
+
+float Player::recup_speed()
+{
+    return speed;
 }
 
 void Player::limite_map()

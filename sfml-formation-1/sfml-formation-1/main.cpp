@@ -21,7 +21,7 @@ int main()
 {
     sf::Event event;
 
-    RenderWindow window(VideoMode(768, 512), "SFML works!");
+    RenderWindow window(VideoMode(1500, 1000), "SFML works!");    //768, 512
     window.setKeyRepeatEnabled(false);
     window.setFramerateLimit(60);
 
@@ -46,7 +46,7 @@ int main()
     slime.update_ennemy_texture(charactere_texture);
     slime.update_ennemy_texture_rect(IntRect(1 * 16, 4 * 16, 16, 16));
     slime.update_ennemy_scale(3, 3);
-    slime.update_ennemy_position(330, 0);
+    slime.update_ennemy_position();
     slime.addEnnemySprite();
 
     while (window.isOpen())
@@ -58,11 +58,15 @@ int main()
             hero.recup_event_player(event, window); // check les touche appuyé 
         }
 
+        //deplacement et annimation player
+        hero.modif_velocity_player();
+        // nromalization vecteur
         
-        hero.check_stop_move();
-        hero.normalize();
+        hero.update_player_move(manager);
         hero.anim_hero(manager);
 
+        slime.deplacement_ennemy(manager);
+        slime.move();
         slime.moveEnnemy(manager);
 
         

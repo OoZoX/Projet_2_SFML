@@ -41,8 +41,6 @@ public:
 
     sf::Sprite recup_hero();
 
-    void normalize();
-
     void update_player_position(int _x, int _y);
 
     void update_player_texture(sf::Texture& texture);
@@ -51,7 +49,7 @@ public:
 
     void update_player_scale(int scale_x, int scale_y);
 
-    void update_player_move();
+    void update_player_move(Manager&);
 
     void addHeroSprite();
 
@@ -59,7 +57,9 @@ public:
 
     void recup_event_player(sf::Event& event, sf::RenderWindow& window);
 
-    void check_stop_move();
+    void modif_velocity_player();
+
+    float recup_speed();
 
     void limite_map();
 

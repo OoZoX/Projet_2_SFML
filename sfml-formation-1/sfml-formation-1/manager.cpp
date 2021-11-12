@@ -9,7 +9,19 @@ void Manager::update_current_time()
 {
     timer_player = clock.getElapsedTime();
     timer_slime = clock.getElapsedTime();
-    cout << "___________" << timer_player.asSeconds() << endl;
-    cout << "///////////" << timer_slime.asSeconds() << endl;
+    timer_dep_ennemy = clock.getElapsedTime();
 
+}
+
+Vector2f Manager::normalize(Vector2f velocity, float speed)
+{
+
+    float norme = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y));
+
+    if (norme != 0)
+    {
+        velocity = ((velocity) / norme) * speed;
+    }
+
+    return velocity;
 }

@@ -3,11 +3,17 @@
 #include <map>
 #include <iostream>
 #include "manager.h"
+#include <vector>
 
 class Ennemy : public Manager
 {
 private:
     sf::Sprite _ennemy;
+    sf::Time timer_deplacement;
+    float speed = 1.0f;
+    int index = 0;
+    bool check_calcul = false;
+    sf::Vector2f velocity = { 0.0f, 0.0f };
 
     std::map<std::string, sf::IntRect> IntRectEnnemy;
 
@@ -26,6 +32,15 @@ private:
     {"haut-2", {2,7}}
     };
 
+    std::vector<sf::Vector2f> chemin
+    {
+    sf::Vector2f(100, 100),
+    sf::Vector2f(200,150),
+    sf::Vector2f(500,120),
+    sf::Vector2f(300,20)
+
+    };
+
 public:
     Ennemy();
     sf::Sprite recup_sprite_ennemy();
@@ -35,6 +50,7 @@ public:
     void update_ennemy_texture(sf::Texture& texture);
     void update_ennemy_texture_rect(sf::IntRect tile_ennemy);
     void update_ennemy_scale(int x, int y);
-    void update_ennemy_position(int x, int y);
+    void update_ennemy_position();
+    void deplacement_ennemy(Manager& manager);
 };
 
