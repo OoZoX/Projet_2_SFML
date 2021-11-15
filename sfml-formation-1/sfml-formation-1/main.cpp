@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "manager.h"
 #include "player.h"
+#include "horse.h"
 #include "ennemy.h"
 #include "level.h"
 
@@ -39,6 +40,16 @@ int main()
     hero.update_player_texture_rect(IntRect(1 * 16, 0 * 16, 16, 16));
     hero.update_player_scale(3, 3);
     hero.addHeroSprite();
+
+    Texture horseTexture;
+    horseTexture.loadFromFile("horse.png");
+
+    Horse horse;
+    horse.updateHorsePosition(50, 275);
+    horse.updateHorseTexture(horseTexture);
+    horse.updateHorseTextureRect(IntRect(0 * 16, 0 * 16, 16 * 5, 16 * 5));
+    horse.updateHorseScale(1, 1);
+    horse.addHeroSprite();
 
     Ennemy slime;   // creation slime
     slime.update_ennemy_texture(charactere_texture);
@@ -112,6 +123,7 @@ int main()
         }
 
         window.draw(slime.recup_sprite_ennemy());
+        window.draw(horse.getHorse());
         window.draw(hero.recup_hero());
         window.display();
         window.clear();
