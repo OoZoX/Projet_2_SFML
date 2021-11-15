@@ -61,6 +61,8 @@ public:
 
     float recup_speed();
 
+    sf::Vector2f recup_position();
+
     void limite_map();
 
 };

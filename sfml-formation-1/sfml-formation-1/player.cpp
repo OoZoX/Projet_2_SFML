@@ -222,6 +222,11 @@ float Player::recup_speed()
     return speed;
 }
 
+Vector2f Player::recup_position()
+{
+    return hero.getPosition();
+}
+
 void Player::limite_map()
 {
     if (hero.getPosition().x <= 0)

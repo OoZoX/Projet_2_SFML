@@ -3,11 +3,13 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+class Player;
 class Horse
 {
 private:
     sf::Sprite horse;
-
+    bool player_horse = false;
+    bool key_release_e = false;
     //sf::Vector2f velocity = { 0.0f, 0.0f };
     //float speed = 2.0f;
 
@@ -38,4 +40,6 @@ public:
     void updateHorseTextureRect(sf::IntRect tile_hero);
     void updateHorseScale(int scale_x, int scale_y);
     void addHeroSprite();
+    void dep_player_horse(Player&);
+    void mont_horse(Player& player, sf::Event& event);
 };

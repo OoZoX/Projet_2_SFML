@@ -104,6 +104,8 @@ int main()
         slime.move();
         slime.anim_ennemy(manager);
         
+        horse.mont_horse(hero, event);
+        horse.dep_player_horse(hero);
 
         
 
