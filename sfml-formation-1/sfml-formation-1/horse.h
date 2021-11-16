@@ -1,45 +1,51 @@
 #pragma once
+#include "manager.h"
+#include "player.h"
 #include <map>
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
 class Player;
-class Horse
+
+class Horse : public Manager
 {
 private:
     sf::Sprite horse;
     bool player_horse = false;
     bool key_release_e = false;
-    //sf::Vector2f velocity = { 0.0f, 0.0f };
-    //float speed = 2.0f;
+    bool activeKeys[KEY_MAX] = { false };
+    Keys exKey = DOWN;
+
+    sf::Vector2f velocity = { 0.0f, 0.0f };
+    float speed = 2.0f;
 
     std::map<std::string, sf::Vector2i> horseTiles = {
-    {"bas", {}},
-    {"bas-1", {}},
-    {"bas-2", {}},
-    {"gauche", {}},
-    {"gauche-1", {}},
-    {"gauche-2", {}},
-    {"droite", {}},
-    {"droite-1",{}},
-    {"droite-2", {}},
-    {"haut", {}},
-    {"haut-1", {}},
-    {"haut-2", {}}
+    {"bas", {0, 0}},
+    {"bas-1", {0, 2}},
+    {"bas-2", {0, 3}},
+    {"droite", {3, 0}},
+    {"droite-1",{1, 0}},
+    {"droite-2", {1, 3}},
+    {"haut", {3, 0}},
+    {"haut-1", {2, 1}},
+    {"haut-2", {2, 2}}
     };
 
     std::map<std::string, sf::IntRect> IntRectHero;
 
 public:
     Horse();
-
     sf::Sprite getHorse();
-
     void updateHorsePosition(int _x, int _y);
     void updateHorseTexture(sf::Texture& texture);
     void updateHorseTextureRect(sf::IntRect tile_hero);
     void updateHorseScale(int scale_x, int scale_y);
-    void addHeroSprite();
-    void dep_player_horse(Player&);
+    void addHorseSprite();
+    bool dep_player_horse(Player&);
     void mont_horse(Player& player, sf::Event& event);
+    void updateHorseMove(Manager& manager);
+    void getHorseEvent(sf::Event& event, sf::RenderWindow& window);
+    void horseAnimation(Manager& manager);
+    void updateHorseVelocity();
+    void mapLimit();
 };

@@ -4,7 +4,6 @@
 #include <iostream>
 #include "manager.h"
 
-
 enum Keys { UP, DOWN, LEFT, RIGHT, SPACE, KEY_MAX };
 
 class Player : public Manager
@@ -17,7 +16,7 @@ private:
     float speed = 2.0f;
 
     bool activeKeys[KEY_MAX] = { false };
-    Keys exKey = DOWN;
+    Keys exKey = DOWN; 
 
 	std::map<std::string, sf::Vector2i> heroTiles = {
     {"bas", {1,0}},

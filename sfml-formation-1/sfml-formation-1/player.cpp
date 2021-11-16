@@ -62,11 +62,9 @@ void Player::anim_hero(Manager& manager)
 
     if (activeKeys[DOWN])
     {
-        cout << "DOWN" << endl;
         exKey = Keys::DOWN;
         if (velocity.y > 0)
         {
-            cout << "velocity" << endl;
             if (manager.timer_player >= time1)
             {
                 
@@ -159,8 +157,6 @@ void Player::anim_hero(Manager& manager)
 
 void Player::recup_event_player(Event& event, RenderWindow& window)
 {
-    if (event.type == sf::Event::Closed)
-        window.close();
     if (event.type == sf::Event::KeyPressed)
     {
         if (event.key.code == sf::Keyboard::Z || event.key.code == sf::Keyboard::W)

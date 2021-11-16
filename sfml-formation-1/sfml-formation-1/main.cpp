@@ -37,7 +37,6 @@ int main()
     Player hero;    // creation hero / player
     hero.update_player_position(50, 50);
     hero.update_player_texture(charactere_texture);
-    hero.update_player_texture_rect(IntRect(1 * 16, 0 * 16, 16, 16));
     hero.update_player_scale(3, 3);
     hero.addHeroSprite();
 
@@ -47,9 +46,9 @@ int main()
     Horse horse;
     horse.updateHorsePosition(50, 275);
     horse.updateHorseTexture(horseTexture);
-    horse.updateHorseTextureRect(IntRect(0 * 16, 0 * 16, 16 * 5, 16 * 5));
+    horse.updateHorseTextureRect(IntRect(0 * 16, 0 * 16, 16 * 5, 16* 5));
     horse.updateHorseScale(1, 1);
-    horse.addHeroSprite();
+    horse.addHorseSprite();
 
     Ennemy slime;   // creation slime
     slime.update_ennemy_texture(charactere_texture);
@@ -90,27 +89,35 @@ int main()
         
         while (window.pollEvent(event))
         {
-            hero.recup_event_player(event, window); // check les touche appuyé 
+            horse.mont_horse(hero, event);
+            if (!horse.dep_player_horse(hero))
+            {
+                hero.recup_event_player(event, window); // check les touche appuyé
+            }
+            else
+            {
+                horse.getHorseEvent(event, window);
+            }
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+            }
         }
 
-        //deplacement et annimation player
         hero.modif_velocity_player();
-        // nromalization vecteur
-        
         hero.update_player_move(manager);
         hero.anim_hero(manager);
+        hero.limite_map();
 
         slime.deplacement_ennemy(manager);
         slime.move();
         slime.anim_ennemy(manager);
         
-        horse.mont_horse(hero, event);
+        horse.updateHorseVelocity();
+        horse.updateHorseMove(manager);
+        //horse.horseAnimation(manager);
         horse.dep_player_horse(hero);
-
-        
-
-        hero.limite_map();
-        slime.move();
+        horse.mapLimit();
 
         vector<Sprite> recup_ground = level.recup_display_ground();
         vector<Sprite> recup_map = level.recup_display_map();
