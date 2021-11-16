@@ -130,7 +130,6 @@ int main()
         {
             window.draw(recup_map[i]);
         }
-
         window.draw(slime.recup_sprite_ennemy());
         window.draw(horse.getHorse());
         window.draw(hero.recup_hero());

@@ -17,7 +17,11 @@ private:
     Keys exKey = DOWN;
 
     sf::Vector2f velocity = { 0.0f, 0.0f };
-    float speed = 2.0f;
+    sf::Vector2f speed = { 0.0f, 0.0f };
+    sf::Vector2f acceleration = {0.0f, 0.0f };
+    float masse = 150.0f;
+    float poussee = 0.0f;
+    float angle = 0.0f;
 
     std::map<std::string, sf::Vector2i> horseTiles = {
     {"bas", {0, 0}},

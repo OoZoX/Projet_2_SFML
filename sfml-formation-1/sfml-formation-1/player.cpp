@@ -229,16 +229,16 @@ void Player::limite_map()
     {
         hero.setPosition(0, hero.getPosition().y);
     }
-    else if (hero.getPosition().x >= 720)
+    if (hero.getPosition().x >= 724)
     {
-        hero.setPosition(720, hero.getPosition().y);
+        hero.setPosition(724, hero.getPosition().y);
     }
-    else if (hero.getPosition().y <= 0)
+    if (hero.getPosition().y <= 0)
     {
         hero.setPosition(hero.getPosition().x, 0);
     }
-    else if (hero.getPosition().y >= 464)
+    if (hero.getPosition().y >= 462)
     {
-        hero.setPosition(hero.getPosition().x, 464);
+        hero.setPosition(hero.getPosition().x, 462);
     }
 }

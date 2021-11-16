@@ -77,6 +77,10 @@ void Horse::mont_horse(Player& player, Event& event)
                 else if (player_horse == true)
                 {
                     player_horse = false;
+                    speed = { 0.0f, 0.0f };
+                    acceleration = { 0.0f, 0.0f };
+                    poussee = 0.0f;
+                    angle = 0.0f;
                     player.update_player_position(player.recup_position().x + 10.0f, player.recup_position().y + 10.0f);
                 }
             }
@@ -93,33 +97,33 @@ void Horse::mont_horse(Player& player, Event& event)
 
 void Horse::updateHorseMove(Manager& manager)
 {
-    if (sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y)) != 0)
-    {
-        velocity = manager.normalize(velocity, speed);
-    }
-    horse.move(velocity);
+    horse.move(speed);
 }
 
 void Horse::getHorseEvent(Event& event, RenderWindow& window)
 {
+    poussee = 0.0f;
     if (event.type == sf::Event::KeyPressed)
     {
         if (event.key.code == sf::Keyboard::Z || event.key.code == sf::Keyboard::W)
         {
             activeKeys[UP] = true;
-
+            poussee = 100;
         }
         else if (event.key.code == sf::Keyboard::Q || event.key.code == sf::Keyboard::A)
         {
             activeKeys[LEFT] = true;
+            angle += 0.5;
         }
         else if (event.key.code == sf::Keyboard::S)
         {
             activeKeys[DOWN] = true;
+            poussee = -100;
         }
         else if (event.key.code == sf::Keyboard::D)
         {
             activeKeys[RIGHT] = true;
+            angle -= 0.5;
         }
 
     }
@@ -142,6 +146,11 @@ void Horse::getHorseEvent(Event& event, RenderWindow& window)
             activeKeys[RIGHT] = false;
         }
     }
+    acceleration.x = ((1 / masse) * (poussee * cos(angle))) - ((12 / masse) * speed.x);
+    acceleration.y = ((1 / masse) * (poussee * sin(angle))) - ((12 / masse) * speed.y);
+    speed.x += acceleration.x; // * delta time
+    speed.y += acceleration.y;
+    cout << "speed : " << speed.x << "  " << speed.y << endl;
 }
 
 void Horse::horseAnimation(Manager& manager)
@@ -252,10 +261,10 @@ void Horse::updateHorseVelocity()
     if (activeKeys[RIGHT] == false) { velocity.x -= velocity.x; }
     if (activeKeys[DOWN] == false) { velocity.y -= velocity.y; }
 
-    if (activeKeys[UP]) { velocity.y -= speed; }
-    if (activeKeys[LEFT]) { velocity.x -= speed; }
-    if (activeKeys[RIGHT]) { velocity.x += speed; }
-    if (activeKeys[DOWN]) { velocity.y += speed; }
+    if (activeKeys[UP]) { velocity.y -= speed.y; }
+    if (activeKeys[LEFT]) { velocity.x -= speed.x; }
+    if (activeKeys[RIGHT]) { velocity.x += speed.x; }
+    if (activeKeys[DOWN]) { velocity.y += speed.y; }
 }
 
 void Horse::mapLimit()
@@ -264,16 +273,16 @@ void Horse::mapLimit()
     {
         horse.setPosition(0, horse.getPosition().y);
     }
-    else if (horse.getPosition().x >= 720)
+    else if (horse.getPosition().x >= 716)
     {
-        horse.setPosition(720, horse.getPosition().y);
+        horse.setPosition(716, horse.getPosition().y);
     }
     else if (horse.getPosition().y <= 0)
     {
         horse.setPosition(horse.getPosition().x, 0);
     }
-    else if (horse.getPosition().y >= 464)
+    else if (horse.getPosition().y >= 462)
     {
-        horse.setPosition(horse.getPosition().x, 464);
+        horse.setPosition(horse.getPosition().x, 462);
     }
 }
