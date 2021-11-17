@@ -25,14 +25,14 @@ private:
 
     std::map<std::string, sf::Vector2i> horseTiles = {
     {"bas", {0, 0}},
-    {"bas-1", {0, 2}},
-    {"bas-2", {0, 3}},
-    {"droite", {3, 0}},
-    {"droite-1",{1, 0}},
-    {"droite-2", {1, 3}},
-    {"haut", {3, 0}},
-    {"haut-1", {2, 1}},
-    {"haut-2", {2, 2}}
+    {"bas-1", {0, 5}},
+    {"bas-2", {0, 10}},
+    {"droite", {15, 0}},
+    {"droite-1",{5, 0}},
+    {"droite-2", {5, 5}},
+    {"haut", {20, 0}},
+    {"haut-1", {10, 5}},
+    {"haut-2", {10, 10}}
     };
 
     std::map<std::string, sf::IntRect> IntRectHero;

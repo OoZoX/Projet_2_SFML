@@ -86,7 +86,6 @@ int main()
     while (window.isOpen())
     {
         manager.update_current_time();
-        
         while (window.pollEvent(event))
         {
             horse.mont_horse(hero, event);
@@ -115,7 +114,7 @@ int main()
         
         horse.updateHorseVelocity();
         horse.updateHorseMove(manager);
-        //horse.horseAnimation(manager);
+        horse.horseAnimation(manager);
         horse.dep_player_horse(hero);
         horse.mapLimit();
 

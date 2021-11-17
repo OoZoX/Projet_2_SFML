@@ -250,7 +250,7 @@ void Horse::horseAnimation(Manager& manager)
     }
     else if (exKey == Keys::LEFT)
     {
-        horse.setTextureRect(IntRectHero["gauche"]);
+        horse.setTextureRect(IntRectHero["droite"]);
     }
 }
 
@@ -273,15 +273,15 @@ void Horse::mapLimit()
     {
         horse.setPosition(0, horse.getPosition().y);
     }
-    else if (horse.getPosition().x >= 716)
+    if (horse.getPosition().x >= 716)
     {
         horse.setPosition(716, horse.getPosition().y);
     }
-    else if (horse.getPosition().y <= 0)
+    if (horse.getPosition().y <= 0)
     {
         horse.setPosition(horse.getPosition().x, 0);
     }
-    else if (horse.getPosition().y >= 462)
+    if (horse.getPosition().y >= 462)
     {
         horse.setPosition(horse.getPosition().x, 462);
     }
