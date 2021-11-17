@@ -4,6 +4,7 @@
 #include "horse.h"
 #include "ennemy.h"
 #include "level.h"
+#include "epee.h"
 
 
 #include <map>
@@ -86,6 +87,17 @@ int main()
     );
     slime.update_ennemy_position();
 
+    Epee epee("epee de base");
+    Texture TextureEpee;
+    
+    TextureEpee.loadFromFile("epee.png");
+    epee.set_placement(100, 100);
+    epee.assign_texture(TextureEpee);
+    epee.set_text_rect(IntRect(100, 67, 100, 67));
+    epee.set_placement(100, 100);
+    epee.set_scale(1, 1);
+
+
     while (window.isOpen())
     {
         manager.update_current_time();
@@ -150,6 +162,7 @@ int main()
         {
             window.draw(recup_map[i]);
         }
+        window.draw(epee.recup_epee());
         window.draw(slime.recup_sprite_ennemy());
         window.draw(horse.getHorse());
         window.draw(hero.recup_hero());

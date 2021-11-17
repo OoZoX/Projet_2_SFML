@@ -267,3 +267,8 @@ void Player::limite_map()
         hero.setPosition(hero.getPosition().x, 462);
     }
 }
+
+void Player::recup_epee()
+{
+
+}

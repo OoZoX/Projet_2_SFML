@@ -5,7 +5,7 @@
 #include "manager.h"
 
 class Horse;
-
+class Epee;
 class Ennemy;
 
 enum Keys { UP, DOWN, LEFT, RIGHT, SPACE, KEY_MAX };
@@ -38,6 +38,8 @@ private:
     };
 
     std::map<std::string, sf::IntRect> IntRectHero;
+
+    Epee* ptr_epee = nullptr;
 
 public:
     Player();
@@ -73,5 +75,7 @@ public:
     void checkCollision(Horse& horse, Ennemy& ennemy);
 
     void limite_map();
+
+    void recup_epee();
 
 };
