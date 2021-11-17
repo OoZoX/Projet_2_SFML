@@ -18,6 +18,11 @@ void Horse::updateHorsePosition(int x, int y)
     horse.setPosition(x, y);
 }
 
+void Horse::updateHorseOrigin(int x, int y)
+{
+    horse.setOrigin(x, y);
+}
+
 void Horse::updateHorseTexture(Texture& texture)
 {
     horse.setTexture(texture);
@@ -39,7 +44,7 @@ void Horse::addHorseSprite()
 {
     for (auto& tile : horseTiles)
     {
-        IntRectHero[tile.first] = IntRect(tile.second.x * 16, tile.second.y * 16, 16 * 5, 16 * 5);
+        IntRectHorse[tile.first] = IntRect(tile.second.x * 16, tile.second.y * 16, 16 * 5, 16 * 5);
 
     }
 }
@@ -150,107 +155,146 @@ void Horse::getHorseEvent(Event& event, RenderWindow& window)
     acceleration.y = ((1 / masse) * (poussee * sin(angle))) - ((12 / masse) * speed.y);
     speed.x += acceleration.x; // * delta time
     speed.y += acceleration.y;
-    cout << "speed : " << speed.x << "  " << speed.y << endl;
 }
 
-void Horse::horseAnimation(Manager& manager)
+void Horse::horseAnimation(Manager& manager, Player& player)
 {
     Time time1 = seconds(0.5f);
     Time time2 = seconds(0.25f);
 
-    if (activeKeys[DOWN])
+    if (dep_player_horse(player))
     {
-        exKey = Keys::DOWN;
-        if (velocity.y > 0)
+        if (activeKeys[DOWN])
         {
-            if (manager.timer_player >= time1)
+            exKey = Keys::DOWN;
+            if (velocity.y > 0)
             {
+                if (manager.timer_player >= time1)
+                {
 
-                manager.timer_player = manager.clock.restart();
+                    manager.timer_player = manager.clock.restart();
 
-                horse.setTextureRect(IntRectHero["bas-2"]);
+                    horse.setTextureRect(IntRectHorse["bas-2"]);
+                    horse.setScale(1, 1);
+                    horse.setOrigin(0, 0);
+                    player.update_player_texture_rect(IntRect(1 * 16, 0 * 16, 16, 16));
 
+                }
+
+                else if (manager.timer_player >= time2)
+                {
+
+                    horse.setTextureRect(IntRectHorse["bas-1"]);
+                    horse.setScale(1, 1);
+                    horse.setOrigin(0, 0);
+                    player.update_player_texture_rect(IntRect(1 * 16, 0 * 16, 16, 16));
+                }
             }
 
-            else if (manager.timer_player >= time2)
-            {
-
-                horse.setTextureRect(IntRectHero["bas-1"]);
-            }
         }
-
-    }
-    else if (activeKeys[UP])
-    {
-        exKey = Keys::UP;
-        if (velocity.y < 0)
+        else if (activeKeys[UP])
         {
-            if (manager.timer_player >= time1)
+            exKey = Keys::UP;
+            if (velocity.y < 0)
             {
-                manager.timer_player = manager.clock.restart();
-                horse.setTextureRect(IntRectHero["haut-2"]);
+                if (manager.timer_player >= time1)
+                {
+                    manager.timer_player = manager.clock.restart();
+                    horse.setTextureRect(IntRectHorse["haut-2"]);
+                    horse.setScale(1, 1);
+                    horse.setOrigin(0, 10);
+                    player.update_player_texture_rect(IntRect(1 * 16, 3 * 16, 16, 16));
+                }
+
+                else if (manager.timer_player >= time2)
+                {
+                    horse.setTextureRect(IntRectHorse["haut-1"]);
+                    horse.setScale(1, 1);
+                    horse.setOrigin(0, 0);
+                    player.update_player_texture_rect(IntRect(1 * 16, 3 * 16, 16, 16));
+                }
             }
 
-            else if (manager.timer_player >= time2)
-            {
-                horse.setTextureRect(IntRectHero["haut-1"]);
-            }
+
         }
-
-
-    }
-    else if (activeKeys[RIGHT])
-    {
-        exKey = Keys::RIGHT;
-        if (velocity.x > 0)
+        else if (activeKeys[RIGHT])
         {
-            if (manager.timer_player >= time1)
+            exKey = Keys::RIGHT;
+            if (velocity.x > 0)
             {
-                manager.timer_player = manager.clock.restart();
-                horse.setTextureRect(IntRectHero["droite-2"]);
+                if (manager.timer_player >= time1)
+                {
+                    manager.timer_player = manager.clock.restart();
+                    horse.setTextureRect(IntRectHorse["droite-2"]);
+                    horse.setScale(1, 1);
+                    horse.setOrigin(0, 10);
+                    player.update_player_texture_rect(IntRect(1 * 16, 2 * 16, 16, 16));
+                }
+
+                else if (manager.timer_player >= time2)
+                {
+                    horse.setTextureRect(IntRectHorse["droite-1"]);
+                    horse.setScale(1, 1);
+                    horse.setOrigin(0, 10);
+                    player.update_player_texture_rect(IntRect(1 * 16, 2 * 16, 16, 16));
+                }
             }
 
-            else if (manager.timer_player >= time2)
-            {
-                horse.setTextureRect(IntRectHero["droite-1"]);
-            }
+
         }
-
-
-    }
-    else if (activeKeys[LEFT])
-    {
-        exKey = Keys::LEFT;
-        if (velocity.x < 0)
+        else if (activeKeys[LEFT])
         {
-            if (manager.timer_player >= time1)
+            exKey = Keys::LEFT;
+            if (velocity.x < 0)
             {
-                manager.timer_player = manager.clock.restart();
-                horse.setTextureRect(IntRectHero["gauche-2"]);
+                if (manager.timer_player >= time1)
+                {
+                    manager.timer_player = manager.clock.restart();
+                    horse.setTextureRect(IntRectHorse["droite"]);
+                    horse.setScale(-1, 1);
+                    horse.setOrigin(16 * 4.75, 10);
+                    player.update_player_texture_rect(IntRect(1 * 16, 1 * 16, 16 * 5, 16 * 5));
+                }
+
+                else if (manager.timer_player >= time2)
+                {
+                    horse.setTextureRect(IntRectHorse["droite"]);
+                    horse.setScale(-1, 1);
+                    horse.setOrigin(16 * 4.75, 10);
+                    player.update_player_texture_rect(IntRect(1 * 16, 1 * 16, 16, 16));
+                }
             }
 
-            else if (manager.timer_player >= time2)
-            {
-                horse.setTextureRect(IntRectHero["gauche-1"]);
-            }
         }
-
-    }
-    else if (exKey == Keys::DOWN)
-    {
-        horse.setTextureRect(IntRectHero["bas"]);
-    }
-    else if (exKey == Keys::UP)
-    {
-        horse.setTextureRect(IntRectHero["haut"]);
-    }
-    else if (exKey == Keys::RIGHT)
-    {
-        horse.setTextureRect(IntRectHero["droite"]);
-    }
-    else if (exKey == Keys::LEFT)
-    {
-        horse.setTextureRect(IntRectHero["droite"]);
+        else if (exKey == Keys::DOWN)
+        {
+            horse.setTextureRect(IntRectHorse["bas"]);
+            horse.setScale(1, 1);
+            horse.setOrigin(0, 0);
+            player.update_player_texture_rect(IntRect(1 * 16, 0 * 16, 16, 16));
+        }
+        else if (exKey == Keys::UP)
+        {
+            horse.setTextureRect(IntRectHorse["haut"]);
+            horse.setScale(1, 1);
+            horse.setOrigin(0, 0);
+            player.update_player_texture_rect(IntRect(1 * 16, 3 * 16, 16, 16));
+        }
+        else if (exKey == Keys::RIGHT)
+        {
+            horse.setTextureRect(IntRectHorse["droite"]);
+            horse.setScale(1, 1);
+            horse.setOrigin(0, 10);
+            player.update_player_texture_rect(IntRect(1 * 16, 2 * 16, 16, 16));
+        }
+        else if (exKey == Keys::LEFT)
+        {
+            horse.setTextureRect(IntRectHorse["droite"]);
+            horse.setScale(-1, 1);
+            horse.setOrigin(16*4.75, 10);
+            Sprite playerr = player.recup_hero();
+            playerr.setTextureRect(IntRect(1 * 16 * 0, 1 * 16, 16, 16));
+        }
     }
 }
 
@@ -265,6 +309,16 @@ void Horse::updateHorseVelocity()
     if (activeKeys[LEFT]) { velocity.x -= speed.x; }
     if (activeKeys[RIGHT]) { velocity.x += speed.x; }
     if (activeKeys[DOWN]) { velocity.y += speed.y; }
+}
+
+Vector2f Horse::getSpeed()
+{
+    return speed;
+}
+
+Vector2f Horse::getPosition()
+{
+    return horse.getPosition();
 }
 
 void Horse::mapLimit()

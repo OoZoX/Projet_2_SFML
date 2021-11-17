@@ -1,7 +1,8 @@
 #include "player.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "manager.h"
+#include "horse.h"
+#include "ennemy.h"
 
 using namespace sf;
 using namespace std;
@@ -13,6 +14,10 @@ Sprite Player::recup_hero()
     return hero;
 }
 
+map<string, IntRect> Player::getIntRect()
+{
+    return IntRectHero;
+}
 
 void Player::update_player_position(int x, int y)
 {
@@ -221,6 +226,26 @@ float Player::recup_speed()
 Vector2f Player::recup_position()
 {
     return hero.getPosition();
+}
+
+Vector2f Player::getVelocity()
+{
+    return velocity;
+}
+
+void Player::checkCollision(Horse& horse, Ennemy& ennemy)
+{
+    Sprite horseSprite = horse.getHorse();
+    Sprite ennemySprite = ennemy.recup_sprite_ennemy();
+    FloatRect(0, 0, 0, 0);
+    if (hero.getGlobalBounds().intersects(horseSprite.getGlobalBounds()))
+    {
+        cout << "Intersect Horse" << endl;
+    }
+    if (hero.getGlobalBounds().intersects(ennemySprite.getGlobalBounds()))
+    {
+        cout << "Intersect Ennemy" << endl;
+    }
 }
 
 void Player::limite_map()

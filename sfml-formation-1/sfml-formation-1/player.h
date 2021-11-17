@@ -4,6 +4,10 @@
 #include <iostream>
 #include "manager.h"
 
+class Horse;
+
+class Ennemy;
+
 enum Keys { UP, DOWN, LEFT, RIGHT, SPACE, KEY_MAX };
 
 class Player : public Manager
@@ -40,6 +44,8 @@ public:
 
     sf::Sprite recup_hero();
 
+    std::map<std::string, sf::IntRect> getIntRect();
+
     void update_player_position(int _x, int _y);
 
     void update_player_texture(sf::Texture& texture);
@@ -48,7 +54,7 @@ public:
 
     void update_player_scale(int scale_x, int scale_y);
 
-    void update_player_move(Manager&);
+    void update_player_move(Manager& manager);
 
     void addHeroSprite();
 
@@ -61,6 +67,10 @@ public:
     float recup_speed();
 
     sf::Vector2f recup_position();
+
+    sf::Vector2f getVelocity();
+
+    void checkCollision(Horse& horse, Ennemy& ennemy);
 
     void limite_map();
 

@@ -35,12 +35,13 @@ private:
     {"haut-2", {10, 10}}
     };
 
-    std::map<std::string, sf::IntRect> IntRectHero;
+    std::map<std::string, sf::IntRect> IntRectHorse;
 
 public:
     Horse();
     sf::Sprite getHorse();
     void updateHorsePosition(int _x, int _y);
+    void updateHorseOrigin(int x, int y);
     void updateHorseTexture(sf::Texture& texture);
     void updateHorseTextureRect(sf::IntRect tile_hero);
     void updateHorseScale(int scale_x, int scale_y);
@@ -49,7 +50,9 @@ public:
     void mont_horse(Player& player, sf::Event& event);
     void updateHorseMove(Manager& manager);
     void getHorseEvent(sf::Event& event, sf::RenderWindow& window);
-    void horseAnimation(Manager& manager);
+    void horseAnimation(Manager& manager, Player& player);
     void updateHorseVelocity();
+    sf::Vector2f getSpeed();
+    sf::Vector2f getPosition();
     void mapLimit();
 };

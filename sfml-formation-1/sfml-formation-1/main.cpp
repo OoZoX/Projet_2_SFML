@@ -40,6 +40,9 @@ int main()
     hero.update_player_scale(3, 3);
     hero.addHeroSprite();
 
+    View view(FloatRect(hero.recup_position().x - 100, hero.recup_position().y - 100, 250, 250));
+    window.setView(view);
+
     Texture horseTexture;
     horseTexture.loadFromFile("horse.png");
 
@@ -107,6 +110,7 @@ int main()
         hero.update_player_move(manager);
         hero.anim_hero(manager);
         hero.limite_map();
+        hero.checkCollision(horse, slime);
 
         slime.deplacement_ennemy(manager);
         slime.move();
@@ -114,9 +118,26 @@ int main()
         
         horse.updateHorseVelocity();
         horse.updateHorseMove(manager);
-        horse.horseAnimation(manager);
+        horse.horseAnimation(manager, hero);
         horse.dep_player_horse(hero);
         horse.mapLimit();
+
+        if (!horse.dep_player_horse(hero))
+        {
+            if (hero.recup_position().x + hero.getVelocity().x >= 0 && hero.recup_position().x + hero.getVelocity().x <= 724 && hero.recup_position().y + hero.getVelocity().y >= 0 && hero.recup_position().y + hero.getVelocity().y <= 462)
+            {
+                view.move(hero.getVelocity());
+                window.setView(view);
+            }
+        }
+        else
+        {
+            if (horse.getPosition().x + horse.getSpeed().x >= 0 && horse.getPosition().x + horse.getSpeed().x <= 716 && horse.getPosition().y + horse.getSpeed().y >= 0 && horse.getPosition().y + horse.getSpeed().y <= 462)
+            {
+                view.move(horse.getSpeed());
+                window.setView(view);
+            }
+        }
 
         vector<Sprite> recup_ground = level.recup_display_ground();
         vector<Sprite> recup_map = level.recup_display_map();
