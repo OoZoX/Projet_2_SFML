@@ -270,7 +270,7 @@ void Player::compt_time()
     {
         compt_domage++;
 
-        if (compt_domage >= 120)
+        if (compt_domage >= 60)
         {
             compt_domage = 0;
         }
@@ -420,6 +420,11 @@ void Player::check_dead(HealthBar& vie)
 {
     if (vie.get_vie() <= 0)
     {
-        check_mort = true; 
+        check_mort = true;
     }
+}
+
+bool Player::get_check_mort()
+{
+    return check_mort;
 }
