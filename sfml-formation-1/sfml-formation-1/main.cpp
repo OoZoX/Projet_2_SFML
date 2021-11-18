@@ -31,6 +31,7 @@ int main()
     Sprite game_over;
     Texture text_over;
     text_over.loadFromFile("over.jpg");
+
     game_over.setTexture(text_over);
     game_over.setTextureRect(IntRect(70, 70, 70, 70));
     
