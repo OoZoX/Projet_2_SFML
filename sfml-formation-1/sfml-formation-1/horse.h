@@ -50,4 +50,5 @@ public:
     void updateHorseMove(Manager& manager);
     void horseAnimation(Manager& manager, Player& player);
     void mapLimit();
+    bool getIsMounted();
 };

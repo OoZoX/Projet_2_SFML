@@ -325,3 +325,8 @@ void Horse::mapLimit()
         horse.setPosition(horse.getPosition().x, 462);
     }
 }
+
+bool Horse::getIsMounted()
+{
+    return isMounted;
+}

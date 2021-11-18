@@ -207,11 +207,19 @@ int main()
         if (activ_key == DOWN)
         {
             window.draw(hero.recup_hero());
-            window.draw(epee.recup_epee());
+            if (!horse.getIsMounted()) 
+            {
+                window.draw(epee.recup_epee());
+            }
+            
         }
         else
         {
-            window.draw(epee.recup_epee());
+            if (!horse.getIsMounted())
+            {
+                window.draw(epee.recup_epee());
+            }
+
             window.draw(hero.recup_hero());
         }
         window.draw(horse.getHorse());
