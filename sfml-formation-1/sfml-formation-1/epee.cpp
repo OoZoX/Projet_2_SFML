@@ -42,3 +42,13 @@ void Epee::set_rotate(int rota)
 {
 	arme.setRotation(rota);
 }
+
+int Epee::get_rotate()
+{
+	return arme.getRotation();
+}
+
+void Epee::set_origine(int x, int y)
+{
+	arme.setOrigin(x, y);
+}

@@ -305,46 +305,82 @@ void Player::update_pos_epee(Epee& epee)
     {
         if (activeKeys[UP] && activeKeys[RIGHT])
         {
-            epee.set_placement(pos.x + 60, pos.y - 10);
+            epee.set_placement(pos.x + 20, pos.y + 25);
             epee.set_rotate(45);
         }
         else if (activeKeys[UP] && activeKeys[LEFT])
         {
-            epee.set_placement(pos.x - 30, pos.y - 0);
+            epee.set_placement(pos.x + 25, pos.y + 25);
             epee.set_rotate(-45);
         }
         else if (activeKeys[DOWN] && activeKeys[LEFT])
         {
-            epee.set_placement(pos.x - 10, pos.y + 80);
+            epee.set_placement(pos.x + 25, pos.y + 30);
             epee.set_rotate(-135);
         }
         else if (activeKeys[DOWN] && activeKeys[RIGHT])
         {
-            epee.set_placement(pos.x + 75, pos.y + 65);
+            epee.set_placement(pos.x + 25, pos.y + 30);
             epee.set_rotate(135);
         }
         else if (activeKeys[UP])
         {
-            epee.set_placement(pos.x + 12, pos.y - 40);
+            epee.set_placement(pos.x + 23, pos.y + 20);
             epee.set_rotate(0);
 
         }
         else if (activeKeys[RIGHT])
         {
-            epee.set_placement(pos.x + 80 , pos.y + 20);
+            epee.set_placement(pos.x + 15 , pos.y + 35);
             epee.set_rotate(90);
         }
         else if (activeKeys[LEFT])
         {
 
-            epee.set_placement(pos.x -30, pos.y +45);
+            epee.set_placement(pos.x + 35, pos.y +35);
             epee.set_rotate(-90);
         }
         else if (activeKeys[DOWN])
         {
 
-            epee.set_placement(pos.x + 37 , pos.y + 85);
+            epee.set_placement(pos.x + 35 , pos.y + 27);
             epee.set_rotate(180);
+        }
+    }
+}
+void Player::get_event_attaque(Event& event)
+{
+    if (event.type == Event::KeyPressed)
+    {
+        if (event.key.code == Keyboard::Space)
+        {
+            check_attaque_player = true;
+        }
+    }
+}
+void Player::attaque(Epee& epee)
+{
+    if (check_attaque_player)
+    {
+        if (debut_att)
+        {
+            rota_epee += 5;
+            epee.set_rotate(rota_epee + epee.get_rotate());
+            if (rota_epee >= rota_arrive)
+            {
+                check_attaque_player = false;
+                debut_att = false;
+                epee.set_rotate(ex_rota);
+
+            }
+        }
+        else
+        {
+            
+            ex_rota = epee.get_rotate();
+            rota_epee = 0;
+            debut_att = true;
+            rota_arrive = 40;
         }
     }
 }

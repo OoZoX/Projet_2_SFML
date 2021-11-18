@@ -96,7 +96,7 @@ int main()
     epee.set_text_rect(IntRect(0, 0, 25, 56));
     epee.set_placement(100, 100);
     epee.set_scale(1, 1);
-
+    epee.set_origine(12, 60);
 
     while (window.isOpen())
     {
@@ -105,6 +105,7 @@ int main()
         {
             horse.mont_horse(hero, event);
             hero.recup_epee(event);
+            hero.get_event_attaque(event);
             if (!horse.dep_player_horse(hero))
             {
                 hero.recup_event_player(event, window); // check les touche appuyé
@@ -126,6 +127,7 @@ int main()
         hero.limite_map();
         hero.checkCollision(horse, slime, epee);
         hero.update_pos_epee(epee);
+        hero.attaque(epee);
 
         slime.deplacement_ennemy(manager);
         slime.move();
@@ -157,7 +159,6 @@ int main()
         vector<Sprite> recup_ground = level.recup_display_ground();
         vector<Sprite> recup_map = level.recup_display_map();
         Keys activ_key = hero.recup_activ_key();
-        cout << activ_key << endl;
 
         for (int i = 0; i < recup_ground.size(); i++)
         {

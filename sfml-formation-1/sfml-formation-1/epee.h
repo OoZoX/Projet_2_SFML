@@ -18,5 +18,7 @@ public:
 	void set_scale(float x , float y);
 	sf::Sprite recup_epee();
 	void set_rotate(int rota);
+	int get_rotate();
+	void set_origine(int x, int y);
 };
 

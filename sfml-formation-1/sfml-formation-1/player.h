@@ -21,6 +21,12 @@ private:
 
     bool check_colis_epee = false;
     bool epee_ramas = false;
+    bool check_attaque_player = false;
+    bool debut_att = false;
+
+    float rota_epee;
+    float rota_arrive;
+    float ex_rota;
 
     bool activeKeys[KEY_MAX] = { false };
     Keys exKey = DOWN; 
@@ -82,6 +88,10 @@ public:
     void recup_epee(sf::Event& event);
 
     void update_pos_epee(Epee& epee);
+
+    void get_event_attaque(sf::Event& event);
+
+    void attaque(Epee& epee);
 
     Keys recup_activ_key();
 
