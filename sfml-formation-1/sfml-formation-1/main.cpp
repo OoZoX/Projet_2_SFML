@@ -6,8 +6,6 @@
 #include "level.h"
 #include "epee.h"
 #include "health_bar.h"
-
-
 #include<windows.h>
 #include <map>
 #include <iostream>
@@ -63,11 +61,11 @@ int main()
     horse.updateHorseTexture(horseTexture);
     horse.updateHorseTextureRect(IntRect(0 * 16, 0 * 16, 16 * 5, 16* 5));
     horse.updateHorseScale(1, 1);
-    horse.addHorseSprite();
+    horse.setHorseSprite();
 
     Ennemy slime;   // creation slime
-    slime.update_ennemy_texture(charactere_texture);
-    slime.set_tile_anim
+    slime.updateEnnemyTexture(charactere_texture);
+    slime.setEnnemyTiles
     (
         {
             {"bas", {1,4}},
@@ -84,10 +82,10 @@ int main()
             {"haut-2", {2,7}}
         }
     );
-    slime.update_ennemy_texture_rect(IntRect(1 * 16, 4 * 16, 16, 16));
-    slime.update_ennemy_scale(3, 3);
+    slime.updateEnnemyTextureRect(IntRect(1 * 16, 4 * 16, 16, 16));
+    slime.updateEnnemyScale(3, 3);
     slime.addEnnemySprite();
-    slime.set_navigation_ennemi
+    slime.setPath
     (
         {
             sf::Vector2f(100, 100),
@@ -96,18 +94,17 @@ int main()
             sf::Vector2f(300, 20)
         }
     );
-    slime.update_ennemy_position();
+    slime.updateEnnemyPosition();
 
-    Epee epee("epee de base");
-    Texture TextureEpee;
+    Weapon sword("sword de base");
+    Texture Texturesword;
     
-    TextureEpee.loadFromFile("epee.png");
-    epee.set_placement(100, 100);
-    epee.assign_texture(TextureEpee);
-    epee.set_text_rect(IntRect(0, 0, 25, 56));
-    epee.set_placement(100, 100);
-    epee.set_scale(1, 1);
-    epee.set_origine(12, 60);
+    Texturesword.loadFromFile("epee.png");
+    sword.setWeaponTexture(Texturesword);
+    sword.setWeaponTextureRect(IntRect(0, 0, 25, 56));
+    sword.setWeaponPosition(100, 100);
+    sword.setWeaponScale(1, 1);
+    sword.setWeaponOrigin(12, 60);
 
     HealthBar vie_player;
     Texture TextureCoeur;
@@ -123,10 +120,10 @@ int main()
         manager.update_current_time();
         while (window.pollEvent(event))
         {
-            horse.mont_horse(hero, event);
-            hero.recup_epee(event, epee);
+            horse.mountHorse(hero, event);
+            hero.recup_epee(event, sword);
             hero.get_event_attaque(event);
-            if (!horse.dep_player_horse(hero))
+            if (!horse.playerOnHorse(hero))
             {
                 hero.recup_event_player(event, window); // check les touche appuyé
             }
@@ -145,22 +142,20 @@ int main()
         hero.update_player_move(manager);
         hero.anim_hero(manager);
         hero.limite_map();
-        hero.checkCollision(horse, slime, epee, vie_player);
-        hero.update_pos_epee(epee);
-        hero.attaque(epee);
+        hero.checkCollision(horse, slime, sword, vie_player);
+        hero.update_pos_epee(sword);
+        hero.attaque(sword);
         hero.compt_time();
         hero.check_dead(vie_player);
         
-        epee.check_colis_epee(slime, hero);
+        sword.checkWeaponCollision(slime, hero);
 
-        slime.deplacement_ennemy(manager);
-        slime.move();
-        slime.anim_ennemy(manager);
-        
-        horse.updateHorseVelocity();
+        slime.move(manager);
+        slime.ennemyAnimation(manager);
+   
         horse.updateHorseMove(manager);
         horse.horseAnimation(manager, hero);
-        horse.dep_player_horse(hero);
+        horse.playerOnHorse(hero);
         horse.mapLimit();
 
         vie_player.set_position(hero.recup_position());
@@ -169,7 +164,7 @@ int main()
         game_over.setPosition(pos_hero_game_over.x, pos_hero_game_over.y);
 
 
-        if (!horse.dep_player_horse(hero))
+        if (!horse.playerOnHorse(hero))
         {
             if (hero.recup_position().x + hero.getVelocity().x >= 0 && hero.recup_position().x + hero.getVelocity().x <= 724 && hero.recup_position().y + hero.getVelocity().y >= 0 && hero.recup_position().y + hero.getVelocity().y <= 462)
             {
@@ -198,18 +193,17 @@ int main()
         {
             window.draw(recup_map[i]);
         }
-        if (!slime.get_mort())
+        if (!slime.getDeath())
         {
-            window.draw(slime.recup_sprite_ennemy());
+            window.draw(slime.getEnnemySprite());
         }
-        
 
         if (activ_key == DOWN)
         {
             window.draw(hero.recup_hero());
             if (!horse.getIsMounted()) 
             {
-                window.draw(epee.recup_epee());
+                window.draw(sword.getWeapon());
             }
             
         }
@@ -217,7 +211,7 @@ int main()
         {
             if (!horse.getIsMounted())
             {
-                window.draw(epee.recup_epee());
+                window.draw(sword.getWeapon());
             }
 
             window.draw(hero.recup_hero());

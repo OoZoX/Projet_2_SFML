@@ -5,7 +5,7 @@
 #include "manager.h"
 
 class Horse;
-class Epee;
+class Weapon;
 class Ennemy;
 class HealthBar;
 
@@ -52,7 +52,7 @@ private:
 
     std::map<std::string, sf::IntRect> IntRectHero;
 
-    Epee* ptr_epee = nullptr;
+    Weapon* ptr_epee = nullptr;
 
 public:
     Player();
@@ -85,19 +85,19 @@ public:
 
     sf::Vector2f getVelocity();
 
-    void checkCollision(Horse& horse, Ennemy& ennemy, Epee& epee, HealthBar& bar);
+    void checkCollision(Horse& horse, Ennemy& ennemy, Weapon& epee, HealthBar& bar);
 
     void compt_time();
 
     void limite_map();
 
-    void recup_epee(sf::Event& event, Epee& epee);
+    void recup_epee(sf::Event& event, Weapon& epee);
 
-    void update_pos_epee(Epee& epee);
+    void update_pos_epee(Weapon& epee);
 
     void get_event_attaque(sf::Event& event);
 
-    void attaque(Epee& epee);
+    void attaque(Weapon& epee);
 
     Keys recup_activ_key();
 

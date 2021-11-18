@@ -235,11 +235,11 @@ Vector2f Player::getVelocity()
     return velocity;
 }
 
-void Player::checkCollision(Horse& horse, Ennemy& ennemy, Epee& epee, HealthBar& bar)
+void Player::checkCollision(Horse& horse, Ennemy& ennemy, Weapon& epee, HealthBar& bar)
 {
     Sprite horseSprite = horse.getHorse();
-    Sprite ennemySprite = ennemy.recup_sprite_ennemy();
-    Sprite epeeSprite = epee.recup_epee();
+    Sprite ennemySprite = ennemy.getEnnemySprite();
+    Sprite epeeSprite = epee.getWeapon();
     FloatRect(0, 0, 0, 0);
     if (hero.getGlobalBounds().intersects(horseSprite.getGlobalBounds()))
     {
@@ -299,7 +299,7 @@ void Player::limite_map()
     }
 }
 
-void Player::recup_epee(Event& event, Epee& epee)
+void Player::recup_epee(Event& event, Weapon& epee)
 {
     if (check_colis_epee)
     {
@@ -311,61 +311,61 @@ void Player::recup_epee(Event& event, Epee& epee)
                 {
                     Vector2f pos = hero.getPosition();
                     epee_ramas = true;
-                    epee.set_placement(pos.x + 23, pos.y + 20);
-                    epee.set_rotate(0);
+                    epee.setWeaponPosition(pos.x + 23, pos.y + 20);
+                    epee.setWeaponRotate(0);
                 }
             }
         }
     }
 }
 
-void Player::update_pos_epee(Epee& epee)
+void Player::update_pos_epee(Weapon& epee)
 {
     Vector2f pos = hero.getPosition();
     if (epee_ramas)
     {
         if (activeKeys[UP] && activeKeys[RIGHT])
         {
-            epee.set_placement(pos.x + 20, pos.y + 25);
-            epee.set_rotate(45);
+            epee.setWeaponPosition(pos.x + 20, pos.y + 25);
+            epee.setWeaponRotate(45);
         }
         else if (activeKeys[UP] && activeKeys[LEFT])
         {
-            epee.set_placement(pos.x + 25, pos.y + 25);
-            epee.set_rotate(-45);
+            epee.setWeaponPosition(pos.x + 25, pos.y + 25);
+            epee.setWeaponRotate(-45);
         }
         else if (activeKeys[DOWN] && activeKeys[LEFT])
         {
-            epee.set_placement(pos.x + 25, pos.y + 30);
-            epee.set_rotate(-135);
+            epee.setWeaponPosition(pos.x + 25, pos.y + 30);
+            epee.setWeaponRotate(-135);
         }
         else if (activeKeys[DOWN] && activeKeys[RIGHT])
         {
-            epee.set_placement(pos.x + 25, pos.y + 30);
-            epee.set_rotate(135);
+            epee.setWeaponPosition(pos.x + 25, pos.y + 30);
+            epee.setWeaponRotate(135);
         }
         else if (activeKeys[UP])
         {
-            epee.set_placement(pos.x + 23, pos.y + 20);
-            epee.set_rotate(0);
+            epee.setWeaponPosition(pos.x + 23, pos.y + 20);
+            epee.setWeaponRotate(0);
 
         }
         else if (activeKeys[RIGHT])
         {
-            epee.set_placement(pos.x + 15 , pos.y + 35);
-            epee.set_rotate(90);
+            epee.setWeaponPosition(pos.x + 15 , pos.y + 35);
+            epee.setWeaponRotate(90);
         }
         else if (activeKeys[LEFT])
         {
 
-            epee.set_placement(pos.x + 35, pos.y +35);
-            epee.set_rotate(-90);
+            epee.setWeaponPosition(pos.x + 35, pos.y +35);
+            epee.setWeaponRotate(-90);
         }
         else if (activeKeys[DOWN])
         {
 
-            epee.set_placement(pos.x + 35 , pos.y + 27);
-            epee.set_rotate(180);
+            epee.setWeaponPosition(pos.x + 35 , pos.y + 27);
+            epee.setWeaponRotate(180);
         }
     }
 }
@@ -379,26 +379,26 @@ void Player::get_event_attaque(Event& event)
         }
     }
 }
-void Player::attaque(Epee& epee)
+void Player::attaque(Weapon& epee)
 {
     if (check_attaque_player)
     {
         if (debut_att)
         {
             rota_epee += 5;
-            epee.set_rotate(rota_epee + epee.get_rotate());
+            epee.setWeaponRotate(rota_epee + epee.getWeaponRotate());
             if (rota_epee >= rota_arrive)
             {
                 check_attaque_player = false;
                 debut_att = false;
-                epee.set_rotate(ex_rota);
+                epee.setWeaponRotate(ex_rota);
 
             }
         }
         else
         {
             
-            ex_rota = epee.get_rotate();
+            ex_rota = epee.getWeaponRotate();
             rota_epee = 0;
             debut_att = true;
             rota_arrive = 40;
