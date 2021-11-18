@@ -5,22 +5,22 @@
 class Player;
 class Ennemy;
 
-class Epee
+class Weapon
 {
-	int attaque = 10;
-	std::string nom;
-	sf::Sprite arme;
+	int attack = 10;
+	std::string name;
+	sf::Sprite weapon;
 
 public:
-	Epee(std::string);
-	void assign_texture(sf::Texture&);
-	void set_text_rect(sf::IntRect);
-	void set_placement(int, int);
-	void set_scale(float x , float y);
-	sf::Sprite recup_epee();
-	void set_rotate(int rota);
-	int get_rotate();
-	void set_origine(int x, int y);
-	void check_colis_epee(Ennemy& ennemy, Player& player);
+	Weapon(std::string);
+	sf::Sprite getWeapon();
+	void setWeaponTexture(sf::Texture&);
+	void setWeaponTextureRect(sf::IntRect);
+	void setWeaponPosition(int, int);
+	void setWeaponScale(float x , float y);
+	void setWeaponOrigin(int x, int y);
+	void setWeaponRotate(int rota);
+	int	 getWeaponRotate();
+	void checkWeaponCollision(Ennemy& ennemy, Player& player);
 };
 

@@ -11,7 +11,6 @@ private:
 
     std::vector<sf::Sprite> displayMap;
     std::vector<sf::Sprite> displayGround;
-
     std:: map<std::string, sf::Vector2i> tile_offsets = {
        { "convex_angle1", {0,0}},    //
        { "convex_angle2", {1,0}},    //

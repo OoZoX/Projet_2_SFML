@@ -5,64 +5,61 @@
 using namespace std;
 using namespace sf;
 
-Epee::Epee
-(string new_nom)
+Weapon::Weapon(string new_nom)
 {
-	nom = new_nom;
+	name = new_nom;
 }
 
-void Epee::assign_texture(Texture& texture)
+Sprite Weapon::getWeapon()
 {
-	arme.setTexture(texture);
+	return weapon;
 }
 
-void Epee::set_text_rect(IntRect rect)
+void Weapon::setWeaponTexture(Texture& texture)
 {
-	arme.setTextureRect(rect);
+	weapon.setTexture(texture);
+}
+
+void Weapon::setWeaponTextureRect(IntRect rect)
+{
+	weapon.setTextureRect(rect);
 
 }
 
-void Epee::set_placement(int x, int y)
+void Weapon::setWeaponPosition(int x, int y)
 {
-	arme.setPosition(x, y);
+	weapon.setPosition(x, y);
 
 }
 
-void Epee::set_scale(float x, float y)
+void Weapon::setWeaponScale(float x, float y)
 {
-	arme.setScale(x, y);
+	weapon.setScale(x, y);
 }
 
-Sprite Epee::recup_epee()
+void Weapon::setWeaponOrigin(int x, int y)
 {
-	return arme;
+	weapon.setOrigin(x, y);
 }
 
-void Epee::set_rotate(int rota)
+void Weapon::setWeaponRotate(int rota)
 {
-	arme.setRotation(rota);
+	weapon.setRotation(rota);
 }
 
-int Epee::get_rotate()
+int Weapon::getWeaponRotate()
 {
-	return arme.getRotation();
+	return weapon.getRotation();
 }
 
-void Epee::set_origine(int x, int y)
+void Weapon::checkWeaponCollision(Ennemy& ennemy, Player& player)
 {
-	arme.setOrigin(x, y);
-}
-
-void Epee::check_colis_epee(Ennemy& ennemy, Player& player)
-{
-	Sprite ennemySprite = ennemy.recup_sprite_ennemy();
-
-	if (arme.getGlobalBounds().intersects(ennemySprite.getGlobalBounds()))
+	Sprite ennemySprite = ennemy.getEnnemySprite();
+	if (weapon.getGlobalBounds().intersects(ennemySprite.getGlobalBounds()))
 	{
 		if (player.recup_attaque())
 		{
-			ennemy.set_mort();
-			cout << "mort ennemy" << endl;
+			ennemy.setDeath();
 		}
 	}
 }

@@ -12,6 +12,13 @@ Sprite Horse::getHorse()
     return horse;
 }
 
+void Horse::setHorseSprite()
+{
+    for (auto& tile : horseTiles)
+    {
+        IntRectHorse[tile.first] = IntRect(tile.second.x * 16, tile.second.y * 16, 16 * 5, 16 * 5);
+    }
+}
 
 void Horse::updateHorsePosition(int x, int y)
 {
@@ -40,18 +47,71 @@ void Horse::updateHorseScale(int scale_x, int scale_y)
     horse.setScale(scale_x, scale_y);
 }
 
-void Horse::addHorseSprite()
+Vector2f Horse::getSpeed()
 {
-    for (auto& tile : horseTiles)
-    {
-        IntRectHorse[tile.first] = IntRect(tile.second.x * 16, tile.second.y * 16, 16 * 5, 16 * 5);
-
-    }
+    return speed;
 }
 
-bool Horse::dep_player_horse(Player& player)
+Vector2f Horse::getPosition()
 {
-    if (player_horse == true)
+    return horse.getPosition();
+}
+
+void Horse::getHorseEvent(Event& event, RenderWindow& window)
+{
+    poussee = 0.0f;
+    if (event.type == sf::Event::KeyPressed)
+    {
+        if (event.key.code == sf::Keyboard::Z || event.key.code == sf::Keyboard::W)
+        {
+            activeKey[UP] = true;
+            poussee = 100;
+        }
+        else if (event.key.code == sf::Keyboard::Q || event.key.code == sf::Keyboard::A)
+        {
+            activeKey[LEFT] = true;
+            angle += 0.5;
+        }
+        else if (event.key.code == sf::Keyboard::S)
+        {
+            activeKey[DOWN] = true;
+            poussee = -100;
+        }
+        else if (event.key.code == sf::Keyboard::D)
+        {
+            activeKey[RIGHT] = true;
+            angle -= 0.5;
+        }
+
+    }
+    if (event.type == sf::Event::KeyReleased)
+    {
+        if (event.key.code == sf::Keyboard::Z || event.key.code == sf::Keyboard::W)
+        {
+            activeKey[UP] = false;
+        }
+        else if (event.key.code == sf::Keyboard::Q || event.key.code == sf::Keyboard::A)
+        {
+            activeKey[LEFT] = false;
+        }
+        else if (event.key.code == sf::Keyboard::S)
+        {
+            activeKey[DOWN] = false;
+        }
+        else if (event.key.code == sf::Keyboard::D)
+        {
+            activeKey[RIGHT] = false;
+        }
+    }
+    acceleration.x = ((1 / masse) * (poussee * cos(angle))) - ((12 / masse) * speed.x);
+    acceleration.y = ((1 / masse) * (poussee * sin(angle))) - ((12 / masse) * speed.y);
+    speed.x += acceleration.x;
+    speed.y += acceleration.y;
+}
+
+bool Horse::playerOnHorse(Player& player)
+{
+    if (isMounted == true)
     {
         player.update_player_position(horse.getPosition().x + 15, horse.getPosition().y);
         player.update_player_texture_rect(IntRect(1 * 16, 0 * 16, 16, 16));
@@ -62,7 +122,7 @@ bool Horse::dep_player_horse(Player& player)
     }
 }
 
-void Horse::mont_horse(Player& player, Event& event)
+void Horse::mountHorse(Player& player, Event& event)
 {
     Vector2f pos_player;
     pos_player.x = player.recup_position().x;
@@ -74,14 +134,14 @@ void Horse::mont_horse(Player& player, Event& event)
         {
             if (event.key.code == Keyboard::E)
             {
-                if (player_horse == false && key_release_e == false)
+                if (isMounted == false && keyRelease == false)
                 {
-                    player_horse = true;
-                    key_release_e = true;
+                    isMounted = true;
+                    keyRelease = true;
                 }
-                else if (player_horse == true)
+                else if (isMounted == true)
                 {
-                    player_horse = false;
+                    isMounted = false;
                     speed = { 0.0f, 0.0f };
                     acceleration = { 0.0f, 0.0f };
                     poussee = 0.0f;
@@ -94,7 +154,7 @@ void Horse::mont_horse(Player& player, Event& event)
         {
             if (event.key.code == Keyboard::E)
             {
-                key_release_e = false;
+                keyRelease = false;
             }
         }
     }
@@ -105,69 +165,17 @@ void Horse::updateHorseMove(Manager& manager)
     horse.move(speed);
 }
 
-void Horse::getHorseEvent(Event& event, RenderWindow& window)
-{
-    poussee = 0.0f;
-    if (event.type == sf::Event::KeyPressed)
-    {
-        if (event.key.code == sf::Keyboard::Z || event.key.code == sf::Keyboard::W)
-        {
-            activeKeys[UP] = true;
-            poussee = 100;
-        }
-        else if (event.key.code == sf::Keyboard::Q || event.key.code == sf::Keyboard::A)
-        {
-            activeKeys[LEFT] = true;
-            angle += 0.5;
-        }
-        else if (event.key.code == sf::Keyboard::S)
-        {
-            activeKeys[DOWN] = true;
-            poussee = -100;
-        }
-        else if (event.key.code == sf::Keyboard::D)
-        {
-            activeKeys[RIGHT] = true;
-            angle -= 0.5;
-        }
-
-    }
-    if (event.type == sf::Event::KeyReleased)
-    {
-        if (event.key.code == sf::Keyboard::Z || event.key.code == sf::Keyboard::W)
-        {
-            activeKeys[UP] = false;
-        }
-        else if (event.key.code == sf::Keyboard::Q || event.key.code == sf::Keyboard::A)
-        {
-            activeKeys[LEFT] = false;
-        }
-        else if (event.key.code == sf::Keyboard::S)
-        {
-            activeKeys[DOWN] = false;
-        }
-        else if (event.key.code == sf::Keyboard::D)
-        {
-            activeKeys[RIGHT] = false;
-        }
-    }
-    acceleration.x = ((1 / masse) * (poussee * cos(angle))) - ((12 / masse) * speed.x);
-    acceleration.y = ((1 / masse) * (poussee * sin(angle))) - ((12 / masse) * speed.y);
-    speed.x += acceleration.x; // * delta time
-    speed.y += acceleration.y;
-}
-
 void Horse::horseAnimation(Manager& manager, Player& player)
 {
     Time time1 = seconds(0.5f);
     Time time2 = seconds(0.25f);
 
-    if (dep_player_horse(player))
+    if (playerOnHorse(player))
     {
-        if (activeKeys[DOWN])
+        if (activeKey[DOWN])
         {
             exKey = Keys::DOWN;
-            if (velocity.y > 0)
+            if (speed.y > 0 && speed.x < speed.y)
             {
                 if (manager.timer_player >= time1)
                 {
@@ -192,10 +200,10 @@ void Horse::horseAnimation(Manager& manager, Player& player)
             }
 
         }
-        else if (activeKeys[UP])
+        else if (activeKey[UP])
         {
             exKey = Keys::UP;
-            if (velocity.y < 0)
+            if (speed.y < 0 && speed.x < speed.y)
             {
                 if (manager.timer_player >= time1)
                 {
@@ -217,10 +225,10 @@ void Horse::horseAnimation(Manager& manager, Player& player)
 
 
         }
-        else if (activeKeys[RIGHT])
+        else if (activeKey[RIGHT])
         {
             exKey = Keys::RIGHT;
-            if (velocity.x > 0)
+            if (speed.x > 0 && speed.y < speed.x)
             {
                 if (manager.timer_player >= time1)
                 {
@@ -242,10 +250,10 @@ void Horse::horseAnimation(Manager& manager, Player& player)
 
 
         }
-        else if (activeKeys[LEFT])
+        else if (activeKey[LEFT])
         {
             exKey = Keys::LEFT;
-            if (velocity.x < 0)
+            if (speed.x < 0 && speed.y < speed.x)
             {
                 if (manager.timer_player >= time1)
                 {
@@ -296,29 +304,6 @@ void Horse::horseAnimation(Manager& manager, Player& player)
             playerr.setTextureRect(IntRect(1 * 16 * 0, 1 * 16, 16, 16));
         }
     }
-}
-
-void Horse::updateHorseVelocity()
-{
-    if (activeKeys[UP] == false) { velocity.y -= velocity.y; }
-    if (activeKeys[LEFT] == false) { velocity.x -= velocity.x; }
-    if (activeKeys[RIGHT] == false) { velocity.x -= velocity.x; }
-    if (activeKeys[DOWN] == false) { velocity.y -= velocity.y; }
-
-    if (activeKeys[UP]) { velocity.y -= speed.y; }
-    if (activeKeys[LEFT]) { velocity.x -= speed.x; }
-    if (activeKeys[RIGHT]) { velocity.x += speed.x; }
-    if (activeKeys[DOWN]) { velocity.y += speed.y; }
-}
-
-Vector2f Horse::getSpeed()
-{
-    return speed;
-}
-
-Vector2f Horse::getPosition()
-{
-    return horse.getPosition();
 }
 
 void Horse::mapLimit()
