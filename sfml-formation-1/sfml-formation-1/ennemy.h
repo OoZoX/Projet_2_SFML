@@ -3,7 +3,6 @@
 #include <map>
 #include <iostream>
 #include "manager.h"
-#include <vector>
 
 class Ennemy : public Manager
 {

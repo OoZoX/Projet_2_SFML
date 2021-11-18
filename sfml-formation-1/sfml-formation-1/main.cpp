@@ -8,6 +8,7 @@
 #include "health_bar.h"
 
 
+#include<windows.h>
 #include <map>
 #include <iostream>
 
@@ -26,6 +27,13 @@ int main()
     RenderWindow window(VideoMode(768, 512), "SFML works!");    //768, 512
     window.setKeyRepeatEnabled(false);
     window.setFramerateLimit(60);
+
+    Sprite game_over;
+    Texture text_over;
+    text_over.loadFromFile("over.jpg");
+    game_over.setTexture(text_over);
+    game_over.setTextureRect(IntRect(70, 70, 70, 70));
+    
 
     Manager manager;    // creation manager
 
@@ -140,6 +148,7 @@ int main()
         hero.update_pos_epee(epee);
         hero.attaque(epee);
         hero.compt_time();
+        hero.check_dead(vie_player);
         
         epee.check_colis_epee(slime, hero);
 
@@ -155,7 +164,8 @@ int main()
 
         vie_player.set_position(hero.recup_position());
 
-
+        Vector2f pos_hero_game_over = hero.recup_position();
+        game_over.setPosition(pos_hero_game_over.x, pos_hero_game_over.y);
 
 
         if (!horse.dep_player_horse(hero))
@@ -206,7 +216,24 @@ int main()
         window.draw(horse.getHorse());
         window.draw(vie_player.get_coeur());
         window.draw(vie_player.get_bar());
+        if (hero.get_check_mort())
+        {
+            cout << "game over" << endl;
+            window.draw(game_over);
+        }
         window.display();
+
+        if (hero.get_check_mort())
+        {
+            int attente = 0;
+            while (attente < 5000)
+            {
+                attente ++;
+                cout << attente << endl;
+                // attend pour fermer 
+            }
+            window.close();
+        }
         window.clear();
     }
     return 0;

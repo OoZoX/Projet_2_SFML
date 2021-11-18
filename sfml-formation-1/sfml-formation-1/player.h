@@ -105,4 +105,6 @@ public:
 
     void check_dead(HealthBar& vie);
 
+    bool get_check_mort();
+
 };
