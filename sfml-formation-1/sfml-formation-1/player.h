@@ -95,4 +95,6 @@ public:
 
     Keys recup_activ_key();
 
+    bool recup_attaque();
+
 };

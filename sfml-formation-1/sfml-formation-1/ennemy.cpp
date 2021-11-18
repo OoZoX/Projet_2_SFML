@@ -209,3 +209,13 @@ void Ennemy::set_tile_anim(map<string, Vector2i> new_ennemy_tile)
 {
     ennemyTiles = new_ennemy_tile;
 }
+
+void Ennemy::set_mort()
+{
+    check_mort = true;
+}
+
+bool Ennemy::get_mort()
+{
+    return check_mort;
+}

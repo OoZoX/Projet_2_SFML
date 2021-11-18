@@ -242,16 +242,13 @@ void Player::checkCollision(Horse& horse, Ennemy& ennemy, Epee& epee)
     FloatRect(0, 0, 0, 0);
     if (hero.getGlobalBounds().intersects(horseSprite.getGlobalBounds()))
     {
-        cout << "Intersect Horse" << endl;
     }
     if (hero.getGlobalBounds().intersects(ennemySprite.getGlobalBounds()))
     {
-        cout << "Intersect Ennemy" << endl;
     }
 
     if (hero.getGlobalBounds().intersects(epeeSprite.getGlobalBounds()))
     {
-        cout << "Intersect epee" << endl;
         check_colis_epee = true;
     }
     else
@@ -346,6 +343,11 @@ void Player::update_pos_epee(Epee& epee)
             epee.set_placement(pos.x + 35 , pos.y + 27);
             epee.set_rotate(180);
         }
+        else
+        {
+            epee.set_placement(pos.x + 23, pos.y + 20);
+            epee.set_rotate(0);
+        }
     }
 }
 void Player::get_event_attaque(Event& event)
@@ -388,4 +390,9 @@ void Player::attaque(Epee& epee)
 Keys Player::recup_activ_key()
 {
     return exKey;
+}
+
+bool Player::recup_attaque()
+{
+    return check_attaque_player;
 }

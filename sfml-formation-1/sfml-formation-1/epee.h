@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 class Player;
+class Ennemy;
 
 class Epee
 {
@@ -20,5 +21,6 @@ public:
 	void set_rotate(int rota);
 	int get_rotate();
 	void set_origine(int x, int y);
+	void check_colis_epee(Ennemy& ennemy, Player& player);
 };
 

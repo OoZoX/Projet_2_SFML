@@ -1,5 +1,6 @@
 #include "epee.h"
 #include "player.h"
+#include "ennemy.h"
 
 using namespace std;
 using namespace sf;
@@ -13,19 +14,18 @@ Epee::Epee
 void Epee::assign_texture(Texture& texture)
 {
 	arme.setTexture(texture);
-	cout << "texture" << endl;
 }
 
 void Epee::set_text_rect(IntRect rect)
 {
 	arme.setTextureRect(rect);
-	cout << "rect" << endl;
+
 }
 
 void Epee::set_placement(int x, int y)
 {
 	arme.setPosition(x, y);
-	cout << "place apee" << endl;
+
 }
 
 void Epee::set_scale(float x, float y)
@@ -52,3 +52,18 @@ void Epee::set_origine(int x, int y)
 {
 	arme.setOrigin(x, y);
 }
+
+void Epee::check_colis_epee(Ennemy& ennemy, Player& player)
+{
+	Sprite ennemySprite = ennemy.recup_sprite_ennemy();
+
+	if (arme.getGlobalBounds().intersects(ennemySprite.getGlobalBounds()))
+	{
+		if (player.recup_attaque())
+		{
+			ennemy.set_mort();
+			cout << "mort ennemy" << endl;
+		}
+	}
+}
+

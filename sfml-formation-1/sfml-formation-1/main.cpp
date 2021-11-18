@@ -128,6 +128,8 @@ int main()
         hero.checkCollision(horse, slime, epee);
         hero.update_pos_epee(epee);
         hero.attaque(epee);
+        
+        epee.check_colis_epee(slime, hero);
 
         slime.deplacement_ennemy(manager);
         slime.move();
@@ -168,7 +170,12 @@ int main()
         {
             window.draw(recup_map[i]);
         }
-        window.draw(slime.recup_sprite_ennemy());
+        if (!slime.get_mort())
+        {
+            window.draw(slime.recup_sprite_ennemy());
+        }
+        
+
         if (activ_key == DOWN)
         {
             window.draw(hero.recup_hero());
