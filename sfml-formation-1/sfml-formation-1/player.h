@@ -7,6 +7,7 @@
 class Horse;
 class Epee;
 class Ennemy;
+class HealthBar;
 
 enum Keys { UP, DOWN, LEFT, RIGHT, SPACE, KEY_MAX };
 
@@ -19,10 +20,13 @@ private:
     sf::Vector2f velocity = {0.0f, 0.0f};
     float speed = 2.0f;
 
+    int compt_domage = 0;
+
     bool check_colis_epee = false;
     bool epee_ramas = false;
     bool check_attaque_player = false;
     bool debut_att = false;
+    bool check_mort = false;
 
     float rota_epee;
     float rota_arrive;
@@ -81,11 +85,13 @@ public:
 
     sf::Vector2f getVelocity();
 
-    void checkCollision(Horse& horse, Ennemy& ennemy, Epee& epee);
+    void checkCollision(Horse& horse, Ennemy& ennemy, Epee& epee, HealthBar& bar);
+
+    void compt_time();
 
     void limite_map();
 
-    void recup_epee(sf::Event& event);
+    void recup_epee(sf::Event& event, Epee& epee);
 
     void update_pos_epee(Epee& epee);
 
@@ -96,5 +102,7 @@ public:
     Keys recup_activ_key();
 
     bool recup_attaque();
+
+    void check_dead(HealthBar& vie);
 
 };

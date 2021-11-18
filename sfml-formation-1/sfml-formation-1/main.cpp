@@ -5,6 +5,7 @@
 #include "ennemy.h"
 #include "level.h"
 #include "epee.h"
+#include "health_bar.h"
 
 
 #include <map>
@@ -15,6 +16,7 @@ using namespace std;
 
 typedef Vector2f vec2;
 typedef Vector2i vec2i;
+typedef Vector2f vec2f;
 
 
 int main()
@@ -98,13 +100,22 @@ int main()
     epee.set_scale(1, 1);
     epee.set_origine(12, 60);
 
+    HealthBar vie_player;
+    Texture TextureCoeur;
+
+    TextureCoeur.loadFromFile("coeur.png");
+
+    vie_player.set_position(hero.recup_position());
+    vie_player.set_texture(TextureCoeur);
+    vie_player.set_bar();
+
     while (window.isOpen())
     {
         manager.update_current_time();
         while (window.pollEvent(event))
         {
             horse.mont_horse(hero, event);
-            hero.recup_epee(event);
+            hero.recup_epee(event, epee);
             hero.get_event_attaque(event);
             if (!horse.dep_player_horse(hero))
             {
@@ -125,9 +136,10 @@ int main()
         hero.update_player_move(manager);
         hero.anim_hero(manager);
         hero.limite_map();
-        hero.checkCollision(horse, slime, epee);
+        hero.checkCollision(horse, slime, epee, vie_player);
         hero.update_pos_epee(epee);
         hero.attaque(epee);
+        hero.compt_time();
         
         epee.check_colis_epee(slime, hero);
 
@@ -140,6 +152,11 @@ int main()
         horse.horseAnimation(manager, hero);
         horse.dep_player_horse(hero);
         horse.mapLimit();
+
+        vie_player.set_position(hero.recup_position());
+
+
+
 
         if (!horse.dep_player_horse(hero))
         {
@@ -187,6 +204,8 @@ int main()
             window.draw(hero.recup_hero());
         }
         window.draw(horse.getHorse());
+        window.draw(vie_player.get_coeur());
+        window.draw(vie_player.get_bar());
         window.display();
         window.clear();
     }

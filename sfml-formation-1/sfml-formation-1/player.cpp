@@ -4,6 +4,7 @@
 #include "horse.h"
 #include "ennemy.h"
 #include "epee.h"
+#include "health_bar.h"
 
 using namespace sf;
 using namespace std;
@@ -234,7 +235,7 @@ Vector2f Player::getVelocity()
     return velocity;
 }
 
-void Player::checkCollision(Horse& horse, Ennemy& ennemy, Epee& epee)
+void Player::checkCollision(Horse& horse, Ennemy& ennemy, Epee& epee, HealthBar& bar)
 {
     Sprite horseSprite = horse.getHorse();
     Sprite ennemySprite = ennemy.recup_sprite_ennemy();
@@ -245,6 +246,12 @@ void Player::checkCollision(Horse& horse, Ennemy& ennemy, Epee& epee)
     }
     if (hero.getGlobalBounds().intersects(ennemySprite.getGlobalBounds()))
     {
+        if (compt_domage == 0)
+        {
+            bar.chang_vie();
+            compt_domage++;
+        }
+        
     }
 
     if (hero.getGlobalBounds().intersects(epeeSprite.getGlobalBounds()))
@@ -255,6 +262,20 @@ void Player::checkCollision(Horse& horse, Ennemy& ennemy, Epee& epee)
     {
         check_colis_epee = false;
     }
+}
+
+void Player::compt_time()
+{
+    if (compt_domage != 0)
+    {
+        compt_domage++;
+
+        if (compt_domage >= 120)
+        {
+            compt_domage = 0;
+        }
+    }
+    
 }
 
 
@@ -278,7 +299,7 @@ void Player::limite_map()
     }
 }
 
-void Player::recup_epee(Event& event)
+void Player::recup_epee(Event& event, Epee& epee)
 {
     if (check_colis_epee)
     {
@@ -288,7 +309,10 @@ void Player::recup_epee(Event& event)
             {
                 if (!epee_ramas)
                 {
+                    Vector2f pos = hero.getPosition();
                     epee_ramas = true;
+                    epee.set_placement(pos.x + 23, pos.y + 20);
+                    epee.set_rotate(0);
                 }
             }
         }
@@ -343,11 +367,6 @@ void Player::update_pos_epee(Epee& epee)
             epee.set_placement(pos.x + 35 , pos.y + 27);
             epee.set_rotate(180);
         }
-        else
-        {
-            epee.set_placement(pos.x + 23, pos.y + 20);
-            epee.set_rotate(0);
-        }
     }
 }
 void Player::get_event_attaque(Event& event)
@@ -395,4 +414,12 @@ Keys Player::recup_activ_key()
 bool Player::recup_attaque()
 {
     return check_attaque_player;
+}
+
+void Player::check_dead(HealthBar& vie)
+{
+    if (vie.get_vie() <= 0)
+    {
+        check_mort = true; 
+    }
 }

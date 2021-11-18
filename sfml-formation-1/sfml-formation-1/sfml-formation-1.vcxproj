@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClCompile Include="ennemy.cpp" />
     <ClCompile Include="epee.cpp" />
+    <ClCompile Include="health_bar.cpp" />
     <ClCompile Include="horse.cpp" />
     <ClCompile Include="level.cpp" />
     <ClCompile Include="manager.cpp" />
@@ -162,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="ennemy.h" />
     <ClInclude Include="epee.h" />
+    <ClInclude Include="health_bar.h" />
     <ClInclude Include="horse.h" />
     <ClInclude Include="level.h" />
     <ClInclude Include="manager.h" />
