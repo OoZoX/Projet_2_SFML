@@ -246,7 +246,7 @@ void Player::checkCollision(Horse& horse, Ennemy& ennemy, Weapon& epee, HealthBa
     }
     if (hero.getGlobalBounds().intersects(ennemySprite.getGlobalBounds()))
     {
-        if (compt_domage == 0)
+        if (compt_domage == 0 && !ennemy.getDeath())
         {
             bar.chang_vie();
             compt_domage++;
