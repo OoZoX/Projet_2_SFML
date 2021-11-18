@@ -93,7 +93,7 @@ int main()
     TextureEpee.loadFromFile("epee.png");
     epee.set_placement(100, 100);
     epee.assign_texture(TextureEpee);
-    epee.set_text_rect(IntRect(100, 67, 100, 67));
+    epee.set_text_rect(IntRect(0, 0, 25, 56));
     epee.set_placement(100, 100);
     epee.set_scale(1, 1);
 
@@ -104,6 +104,7 @@ int main()
         while (window.pollEvent(event))
         {
             horse.mont_horse(hero, event);
+            hero.recup_epee(event);
             if (!horse.dep_player_horse(hero))
             {
                 hero.recup_event_player(event, window); // check les touche appuyé
@@ -112,6 +113,7 @@ int main()
             {
                 horse.getHorseEvent(event, window);
             }
+
             if (event.type == sf::Event::Closed)
             {
                 window.close();
@@ -122,7 +124,8 @@ int main()
         hero.update_player_move(manager);
         hero.anim_hero(manager);
         hero.limite_map();
-        hero.checkCollision(horse, slime);
+        hero.checkCollision(horse, slime, epee);
+        hero.update_pos_epee(epee);
 
         slime.deplacement_ennemy(manager);
         slime.move();
@@ -153,6 +156,8 @@ int main()
 
         vector<Sprite> recup_ground = level.recup_display_ground();
         vector<Sprite> recup_map = level.recup_display_map();
+        Keys activ_key = hero.recup_activ_key();
+        cout << activ_key << endl;
 
         for (int i = 0; i < recup_ground.size(); i++)
         {
@@ -162,10 +167,18 @@ int main()
         {
             window.draw(recup_map[i]);
         }
-        window.draw(epee.recup_epee());
         window.draw(slime.recup_sprite_ennemy());
+        if (activ_key == DOWN)
+        {
+            window.draw(hero.recup_hero());
+            window.draw(epee.recup_epee());
+        }
+        else
+        {
+            window.draw(epee.recup_epee());
+            window.draw(hero.recup_hero());
+        }
         window.draw(horse.getHorse());
-        window.draw(hero.recup_hero());
         window.display();
         window.clear();
     }

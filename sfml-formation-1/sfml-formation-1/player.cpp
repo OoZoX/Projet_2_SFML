@@ -3,6 +3,7 @@
 #include <iostream>
 #include "horse.h"
 #include "ennemy.h"
+#include "epee.h"
 
 using namespace sf;
 using namespace std;
@@ -233,10 +234,11 @@ Vector2f Player::getVelocity()
     return velocity;
 }
 
-void Player::checkCollision(Horse& horse, Ennemy& ennemy)
+void Player::checkCollision(Horse& horse, Ennemy& ennemy, Epee& epee)
 {
     Sprite horseSprite = horse.getHorse();
     Sprite ennemySprite = ennemy.recup_sprite_ennemy();
+    Sprite epeeSprite = epee.recup_epee();
     FloatRect(0, 0, 0, 0);
     if (hero.getGlobalBounds().intersects(horseSprite.getGlobalBounds()))
     {
@@ -246,7 +248,18 @@ void Player::checkCollision(Horse& horse, Ennemy& ennemy)
     {
         cout << "Intersect Ennemy" << endl;
     }
+
+    if (hero.getGlobalBounds().intersects(epeeSprite.getGlobalBounds()))
+    {
+        cout << "Intersect epee" << endl;
+        check_colis_epee = true;
+    }
+    else
+    {
+        check_colis_epee = false;
+    }
 }
+
 
 void Player::limite_map()
 {
@@ -268,7 +281,75 @@ void Player::limite_map()
     }
 }
 
-void Player::recup_epee()
+void Player::recup_epee(Event& event)
 {
+    if (check_colis_epee)
+    {
+        if (event.type == Event::KeyPressed)
+        {
+            if (event.key.code == Keyboard::E)
+            {
+                if (!epee_ramas)
+                {
+                    epee_ramas = true;
+                }
+            }
+        }
+    }
+}
 
+void Player::update_pos_epee(Epee& epee)
+{
+    Vector2f pos = hero.getPosition();
+    if (epee_ramas)
+    {
+        if (activeKeys[UP] && activeKeys[RIGHT])
+        {
+            epee.set_placement(pos.x + 60, pos.y - 10);
+            epee.set_rotate(45);
+        }
+        else if (activeKeys[UP] && activeKeys[LEFT])
+        {
+            epee.set_placement(pos.x - 30, pos.y - 0);
+            epee.set_rotate(-45);
+        }
+        else if (activeKeys[DOWN] && activeKeys[LEFT])
+        {
+            epee.set_placement(pos.x - 10, pos.y + 80);
+            epee.set_rotate(-135);
+        }
+        else if (activeKeys[DOWN] && activeKeys[RIGHT])
+        {
+            epee.set_placement(pos.x + 75, pos.y + 65);
+            epee.set_rotate(135);
+        }
+        else if (activeKeys[UP])
+        {
+            epee.set_placement(pos.x + 12, pos.y - 40);
+            epee.set_rotate(0);
+
+        }
+        else if (activeKeys[RIGHT])
+        {
+            epee.set_placement(pos.x + 80 , pos.y + 20);
+            epee.set_rotate(90);
+        }
+        else if (activeKeys[LEFT])
+        {
+
+            epee.set_placement(pos.x -30, pos.y +45);
+            epee.set_rotate(-90);
+        }
+        else if (activeKeys[DOWN])
+        {
+
+            epee.set_placement(pos.x + 37 , pos.y + 85);
+            epee.set_rotate(180);
+        }
+    }
+}
+
+Keys Player::recup_activ_key()
+{
+    return exKey;
 }

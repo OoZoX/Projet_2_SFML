@@ -19,6 +19,9 @@ private:
     sf::Vector2f velocity = {0.0f, 0.0f};
     float speed = 2.0f;
 
+    bool check_colis_epee = false;
+    bool epee_ramas = false;
+
     bool activeKeys[KEY_MAX] = { false };
     Keys exKey = DOWN; 
 
@@ -72,10 +75,14 @@ public:
 
     sf::Vector2f getVelocity();
 
-    void checkCollision(Horse& horse, Ennemy& ennemy);
+    void checkCollision(Horse& horse, Ennemy& ennemy, Epee& epee);
 
     void limite_map();
 
-    void recup_epee();
+    void recup_epee(sf::Event& event);
+
+    void update_pos_epee(Epee& epee);
+
+    Keys recup_activ_key();
 
 };

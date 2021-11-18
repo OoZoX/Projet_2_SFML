@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
 #include <SFML/Graphics.hpp>
+
+class Player;
+
 class Epee
 {
 	int attaque = 10;
@@ -9,10 +12,11 @@ class Epee
 
 public:
 	Epee(std::string);
-	void assign_texture(sf::Texture);
+	void assign_texture(sf::Texture&);
 	void set_text_rect(sf::IntRect);
 	void set_placement(int, int);
-	void set_scale(float, float);
+	void set_scale(float x , float y);
 	sf::Sprite recup_epee();
+	void set_rotate(int rota);
 };
 
