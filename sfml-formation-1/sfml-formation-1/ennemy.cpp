@@ -58,6 +58,11 @@ void Ennemy::updateEnnemyPosition()
     ennemy.setPosition(path[0].x, path[0].y);
 }
 
+void Ennemy::updateMove()
+{
+    ennemy.move(velocity);
+}
+
 void Ennemy::move(Manager& manager)
 {
     float check_range = 3.0f;

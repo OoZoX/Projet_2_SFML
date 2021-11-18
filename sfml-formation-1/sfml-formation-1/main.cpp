@@ -151,6 +151,7 @@ int main()
         sword.checkWeaponCollision(slime, hero);
 
         slime.move(manager);
+        slime.updateMove();
         slime.ennemyAnimation(manager);
    
         horse.updateHorseMove(manager);

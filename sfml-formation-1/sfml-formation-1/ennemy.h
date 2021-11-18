@@ -30,7 +30,9 @@ public:
     void updateEnnemyTextureRect(sf::IntRect tile_ennemy);
     void updateEnnemyScale(int x, int y);
     void updateEnnemyPosition();
+    void updateMove();
     void move(Manager& manager);
     void ennemyAnimation(Manager& manager);
+    
 };
 
