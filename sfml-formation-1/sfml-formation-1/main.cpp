@@ -24,15 +24,7 @@ int main()
 
     RenderWindow window(VideoMode(768, 512), "SFML works!");    //768, 512
     window.setKeyRepeatEnabled(false);
-    window.setFramerateLimit(60);
-
-    Sprite game_over;
-    Texture text_over;
-    text_over.loadFromFile("over.jpg");
-
-    game_over.setTexture(text_over);
-    game_over.setTextureRect(IntRect(70, 70, 70, 70));
-    
+    window.setFramerateLimit(60); 
 
     Manager manager;    // creation manager
 
@@ -107,12 +99,8 @@ int main()
     sword.setWeaponOrigin(12, 60);
 
     HealthBar vie_player;
-    Texture TextureCoeur;
-
-    TextureCoeur.loadFromFile("coeur.png");
 
     vie_player.set_position(hero.recup_position());
-    vie_player.set_texture(TextureCoeur);
     vie_player.set_bar();
 
     while (window.isOpen())
@@ -162,7 +150,6 @@ int main()
         vie_player.set_position(hero.recup_position());
 
         Vector2f pos_hero_game_over = hero.recup_position();
-        game_over.setPosition(pos_hero_game_over.x, pos_hero_game_over.y);
 
 
         if (!horse.playerOnHorse(hero))
@@ -218,24 +205,11 @@ int main()
             window.draw(hero.recup_hero());
         }
         window.draw(horse.getHorse());
-        window.draw(vie_player.get_coeur());
         window.draw(vie_player.get_bar());
-        if (hero.get_check_mort())
-        {
-            cout << "game over" << endl;
-            window.draw(game_over);
-        }
         window.display();
 
         if (hero.get_check_mort())
         {
-            int attente = 0;
-            while (attente < 5000)
-            {
-                attente ++;
-                cout << attente << endl;
-                // attend pour fermer 
-            }
             window.close();
         }
         window.clear();
